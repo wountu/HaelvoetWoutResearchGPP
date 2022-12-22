@@ -18,5 +18,19 @@
     <ClCompile Include="main.cpp">
       <Filter>Project Files</Filter>
     </ClCompile>
+    <ClCompile Include="Project.cpp">
+      <Filter>Project Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLUtil.cpp">
+      <Filter>Framework Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Project.h">
+      <Filter>Project Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLUtil.h">
+      <Filter>Framework Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -143,6 +143,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Project.cpp" />
+    <ClCompile Include="SDLUtil.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Project.h" />
+    <ClInclude Include="SDLUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
