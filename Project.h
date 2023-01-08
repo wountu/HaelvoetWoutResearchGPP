@@ -1,9 +1,14 @@
 #pragma once
+#include "Utils.h"
+class Formation;
+class Agent;
+class SDLUtil;
+
 class Project
 {
 public:
 	//Constructor and destructor
-	Project();
+	Project(SDLUtil* pSdl);
 	~Project();
 
 	//Rule of 5
@@ -12,8 +17,10 @@ public:
 	Project(Project&& other)				 = delete;
 	Project& operator=(Project&& other)		 = delete;
 
-	void Update(float elapsedSec);
+	void Update(float elapsedSec, Utils::Vector2 mousePos, Utils::Rect grabRect);
 	void Render() const;
 private:
+	Agent* m_pAgent;
+	Formation* m_pFormation;
 };
 

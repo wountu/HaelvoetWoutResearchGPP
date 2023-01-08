@@ -24,6 +24,12 @@
     <ClCompile Include="SDLUtil.cpp">
       <Filter>Framework Files</Filter>
     </ClCompile>
+    <ClCompile Include="Formation.cpp">
+      <Filter>Project Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Agent.cpp">
+      <Filter>Project Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Project.h">
@@ -31,6 +37,15 @@
     </ClInclude>
     <ClInclude Include="SDLUtil.h">
       <Filter>Framework Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Formation.h">
+      <Filter>Project Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Framework Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Agent.h">
+      <Filter>Project Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
