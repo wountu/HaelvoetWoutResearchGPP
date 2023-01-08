@@ -30,6 +30,9 @@
     <ClCompile Include="Agent.cpp">
       <Filter>Project Files</Filter>
     </ClCompile>
+    <ClCompile Include="Group.cpp">
+      <Filter>Project Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Project.h">
@@ -45,6 +48,9 @@
       <Filter>Framework Files</Filter>
     </ClInclude>
     <ClInclude Include="Agent.h">
+      <Filter>Project Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Group.h">
       <Filter>Project Files</Filter>
     </ClInclude>
   </ItemGroup>

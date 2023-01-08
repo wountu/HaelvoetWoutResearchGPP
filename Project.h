@@ -3,6 +3,7 @@
 class Formation;
 class Agent;
 class SDLUtil;
+class Group;
 
 class Project
 {
@@ -21,6 +22,7 @@ public:
 	void Render() const;
 private:
 	Agent* m_pAgent;
+	Group* m_pGroup;
 	Formation* m_pFormation;
 };
 

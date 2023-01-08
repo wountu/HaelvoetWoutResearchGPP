@@ -16,6 +16,8 @@ public:
 
 	void Update(float elapsedSec, Utils::Vector2 target, Utils::Rect grabRect);
 	void Render() const;
+
+	bool IsActivated() const;
 private:
 	Utils::Vector2 m_Position;
 	const float m_MaxSpeed;

@@ -62,3 +62,8 @@ void Agent::HandleMovement(float elapsedSec)
 	m_Position.x += dirVector.x * (m_MaxSpeed * elapsedSec);
 	m_Position.y += dirVector.y * (m_MaxSpeed * elapsedSec);
 }
+
+bool Agent::IsActivated() const
+{
+	return m_Selected;
+}
