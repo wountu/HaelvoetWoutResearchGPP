@@ -1,6 +1,7 @@
 #include "Agent.h"
 #include "Utils.h"
 #include "SDLUtil.h"
+#include "PathFinding.h"
 #include <iostream>
 
 Agent::Agent(SDLUtil* pSdl)
@@ -20,17 +21,18 @@ Agent::~Agent()
 
 }
 
-void Agent::Update(float elapsedSec, Utils::Vector2 target)
+void Agent::Update(float elapsedSec, Utils::Vector2 target, Graph graph)
 {
 	if (m_Path.size() == 0)
 	{
-		m_Path.push_back(target);
+		m_Path = pathfinding::CalculatePath(target, graph.nodes);
 	}
 
 	if (m_Target != target)
 	{
 		m_Target = target;//Mousepos
-		
+		m_Path = pathfinding::CalculatePath(target, graph.nodes);
+
 		std::cout << "test" << "\n";
 	}
 	
@@ -42,9 +44,9 @@ void Agent::Update(float elapsedSec, Utils::Vector2 target)
 
 void Agent::Render() const
 {
-	m_pSDL->ChangeColor(255, 255, 0);
+	m_pSDL->ChangeColor(255, 255, 0, 255);
 	m_pSDL->DrawCircle(m_Position, 5.f);
-	m_pSDL->ChangeColor(255, 0, 0);
+	m_pSDL->ChangeColor(255, 0, 0, 255);
 	m_pSDL->DrawCircle(m_Target, 2.5f);
 }
 

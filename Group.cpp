@@ -51,7 +51,7 @@ void Group::RemoveAgent(Agent* pAgent)
 	}
 }
 
-void Group::Update(float elapsedSec, Utils::Vector2 target)
+void Group::Update(float elapsedSec, Utils::Vector2 target, Graph graph)
 {
 	//std::cout << m_Agents.size() << "\n";
 	m_AllArrived = true; //Will reset back to false if a unit hasn't arrived yet
@@ -60,12 +60,12 @@ void Group::Update(float elapsedSec, Utils::Vector2 target)
 	{
 		for (size_t idx{}; idx < m_Agents.size(); ++idx)
 		{
-			m_Agents[idx].target.x = target.x + (15 * idx);
+			m_Agents[idx].target.x = target.x + (20 * idx);
 			m_Agents[idx].target.y = target.y;
 
 			//std::cout << m_Agents[idx].pAgent->GetPosition().x << ", " << m_Agents[idx].pAgent->GetPosition().y << "\n";
 
-			m_Agents[idx].pAgent->Update(elapsedSec, m_Agents[idx].target);
+			m_Agents[idx].pAgent->Update(elapsedSec, m_Agents[idx].target, graph);
 			if (!m_Agents[idx].pAgent->HasArrived())
 				m_AllArrived = false;
 		}

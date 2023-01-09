@@ -138,13 +138,13 @@ struct Graph
 
 	void Render(SDLUtil* pSdl) const
 	{
-		pSdl->ChangeColor(0, 0, 0);
+		pSdl->ChangeColor(0, 0, 0, 127.f);
 		for (const Node& node : nodes)
 		{
 			node.Render(pSdl);
 		}
 
-		pSdl->ChangeColor(255, 255, 255);
+		pSdl->ChangeColor(255, 255, 255, 127.f);
 		for (const Connection& connection : connections)
 		{
 			connection.Render(pSdl);
@@ -153,7 +153,8 @@ struct Graph
 };
 
 
-class PathFinding
+namespace pathfinding
 {
-};
+	std::vector<Utils::Vector2> CalculatePath(Utils::Vector2 point, std::vector<Node> nodes);
+}
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "Utils.h"
+#include "PathFinding.h"
 #include <vector>
 class Agent;
 
@@ -34,7 +35,7 @@ public:
 	void AddAgent(Agent* pAgent, Utils::Vector2 target);
 	void RemoveAgent(Agent* pAgent);
 
-	void Update(float elapsedSec, Utils::Vector2 target);
+	void Update(float elapsedSec, Utils::Vector2 target, Graph graph);
 	void Render() const;
 private:
 	std::vector<groupAgent> m_Agents;

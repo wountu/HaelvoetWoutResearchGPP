@@ -1,5 +1,6 @@
 #pragma once
 #include "Utils.h"
+#include "PathFinding.h"
 #include <vector>
 
 class SDLUtil;
@@ -15,7 +16,7 @@ public:
 	Agent(Agent&& other)				 = delete;
 	Agent& operator=(Agent&& other)		 = delete;
 
-	void Update(float elapsedSec, Utils::Vector2 target);
+	void Update(float elapsedSec, Utils::Vector2 target, Graph graph);
 	void Render() const;
 	void CheckIfGrabbed(Utils::Rect grabRect);
 

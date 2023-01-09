@@ -174,7 +174,7 @@ Utils::Vector2 SDLUtil::GetWindowDimensions() const
 	return m_WindowDimensions;
 }
 
-void SDLUtil::ChangeColor(Uint8 r, Uint8 g, Uint8 b)
+void SDLUtil::ChangeColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
-	SDL_SetRenderDrawColor(m_pRenderer, r, g, b, 255);
+	SDL_SetRenderDrawColor(m_pRenderer, r, g, b, a);
 }

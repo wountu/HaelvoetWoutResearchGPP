@@ -22,7 +22,7 @@ public:
 	void DrawRect(Utils::Rect rect) const;
 	void DrawLine(Utils::Vector2 point1, Utils::Vector2 point2) const;
 
-	void ChangeColor(Uint8 r, Uint8 g, Uint8 b);
+	void ChangeColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
 	Utils::Vector2 GetMousePos() const;
 	Utils::Rect GetGrabRect() const;

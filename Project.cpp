@@ -48,7 +48,7 @@ void Project::Update(float elapsedSec, Utils::Vector2 mousePos, Utils::Rect grab
 		//pAgent->Update(elapsedSec, mousePos, grabRect);
 	}
 
-	m_pGroup->Update(elapsedSec, mousePos);
+	m_pGroup->Update(elapsedSec, mousePos, m_Graph);
 	//m_pFormation->Update(elapsedSec);
 }
 
