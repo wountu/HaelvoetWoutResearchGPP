@@ -25,6 +25,7 @@ public:
 	Utils::Rect GetGrabRect() const;
 
 	bool Exit() const { return m_Exit; }
+	Utils::Vector2 GetWindowDimensions() const;
 private:
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
@@ -34,5 +35,6 @@ private:
 	Utils::Rect m_GrabRect;
 	bool m_Grabbing; //Holding right mouse button to grab agents
 	Utils::Vector2 m_StartGrabPos, m_ActiveGrabPos;
+	Utils::Vector2 m_WindowDimensions;
 };
 

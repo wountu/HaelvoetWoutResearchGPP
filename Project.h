@@ -1,5 +1,7 @@
 #pragma once
 #include "Utils.h"
+#include <vector>
+
 class Formation;
 class Agent;
 class SDLUtil;
@@ -21,8 +23,10 @@ public:
 	void Update(float elapsedSec, Utils::Vector2 mousePos, Utils::Rect grabRect);
 	void Render() const;
 private:
-	Agent* m_pAgent;
+	std::vector<Agent*> m_pAgents{};
 	Group* m_pGroup;
 	Formation* m_pFormation;
+
+	const int m_NrOfAgents{ 10 };
 };
 

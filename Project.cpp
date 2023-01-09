@@ -7,10 +7,12 @@
 
 Project::Project(SDLUtil* pSdl)
 	:m_pFormation{ new Formation{} }
-	,m_pAgent{new Agent{pSdl}}
 	,m_pGroup{new Group{}}
 {
-
+	for (size_t idx{}; idx < m_NrOfAgents; ++idx)
+	{
+		m_pAgents.push_back(new Agent{ pSdl });
+	}
 }
 
 Project::~Project()
@@ -18,24 +20,39 @@ Project::~Project()
 	delete m_pFormation;
 	m_pFormation = nullptr;
 
-	delete m_pAgent;
-	m_pAgent = nullptr;
-
 	delete m_pGroup;
 	m_pGroup = nullptr;
+
+	for (Agent* pAgent : m_pAgents)
+	{
+		delete pAgent;
+		pAgent = nullptr;
+	}
 }
 
 void Project::Update(float elapsedSec, Utils::Vector2 mousePos, Utils::Rect grabRect)
 {
-	if (m_pAgent->IsActivated())
-		m_pGroup->AddAgent(m_pAgent);
+	for (Agent* pAgent : m_pAgents)
+	{
+		pAgent->CheckIfGrabbed(grabRect);
 
+		if (pAgent->IsActivated())
+			m_pGroup->AddAgent(pAgent, mousePos);
+		//else m_pGroup->RemoveAgent(pAgent); //It will check internally if that agent is in the group
+
+		//pAgent->Update(elapsedSec, mousePos, grabRect);
+	}
+
+	m_pGroup->Update(elapsedSec, mousePos);
 	//m_pFormation->Update(elapsedSec);
-
-	m_pAgent->Update(elapsedSec, mousePos, grabRect);
 }
 
 void Project::Render() const
 {
-	m_pAgent->Render();
+	for (Agent* pAgent : m_pAgents)
+	{
+		pAgent->Render();
+	}
+
+	//m_pGroup->Render();
 }

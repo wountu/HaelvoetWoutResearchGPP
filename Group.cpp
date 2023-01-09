@@ -2,26 +2,67 @@
 #include "Agent.h"
 
 Group::Group()
-	:m_pAgents{}
-	,m_pCommander{nullptr}
+	:m_Agents{}
+	,m_Commander{}
 {
 
 }
 
 Group::~Group()
 {
-	for (Agent* pAgent : m_pAgents)
+}
+
+void Group::AddAgent(Agent* pAgent, Utils::Vector2 target)
+{
+	if (m_Agents.size() == 0)
 	{
-		delete pAgent;
-		pAgent = nullptr;
+		m_Commander.pAgent = pAgent; //If we don't have agents in our group yet, make the first one our commander
+		m_Commander.position = pAgent->GetPosition();
+	}
+
+	groupAgent agent{};
+	agent.pAgent = pAgent;
+	agent.position = pAgent->GetPosition();
+	agent.target = target;
+
+	for (const groupAgent& agentInVect : m_Agents)
+	{
+		if (agentInVect.pAgent == agent.pAgent)
+			return;
+	}
+
+	m_Agents.push_back(agent);
+}
+
+void Group::RemoveAgent(Agent* pAgent)
+{
+	for (size_t idx{}; idx < m_Agents.size(); ++idx)
+	{
+		if (m_Agents[idx].pAgent == pAgent);
+		{
+			std::cout << "test" << "\n";
+			m_Agents[idx] = m_Agents[m_Agents.size() - 1];
+			m_Agents.pop_back();
+		}
+		
 	}
 }
 
-void Group::AddAgent(Agent* pAgent)
+void Group::Update(float elapsedSec, Utils::Vector2 target)
 {
-	if (m_pAgents.size() == 0)
+	//std::cout << m_Agents.size() << "\n";
+
+	for (groupAgent agent : m_Agents)
 	{
-		m_pCommander = pAgent; //If we don't have agents in our group yet, make the first one our commander
+		agent.target = target;
+		agent.pAgent->Update(elapsedSec, agent.target);
 	}
-	m_pAgents.push_back(pAgent);
+}
+
+void Group::Render() const
+{
+	//for (groupAgent agent : m_Agents)
+	//{
+	//	agent.pAgent->Render();
+	//}
 }

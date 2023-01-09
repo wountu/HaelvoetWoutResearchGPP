@@ -4,6 +4,8 @@
 
 int main(int argc, char* argv[])
 {
+	srand(static_cast<unsigned int>(time(nullptr)));
+
 	SDLUtil* pWindow = new SDLUtil("Project", 600, 400);
 	Project* pProject = new Project{pWindow};
 	float elapsedSec{};

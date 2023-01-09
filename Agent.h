@@ -14,10 +14,12 @@ public:
 	Agent(Agent&& other)				 = delete;
 	Agent& operator=(Agent&& other)		 = delete;
 
-	void Update(float elapsedSec, Utils::Vector2 target, Utils::Rect grabRect);
+	void Update(float elapsedSec, Utils::Vector2 target);
 	void Render() const;
+	void CheckIfGrabbed(Utils::Rect grabRect);
 
 	bool IsActivated() const;
+	Utils::Vector2 GetPosition() const;
 private:
 	Utils::Vector2 m_Position;
 	const float m_MaxSpeed;

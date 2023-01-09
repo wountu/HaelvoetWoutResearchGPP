@@ -7,6 +7,7 @@ SDLUtil::SDLUtil(const char* title, const int width, const int height)
 	,m_Grabbing{}
 	,m_StartGrabPos{}
 	,m_ActiveGrabPos{}
+	,m_WindowDimensions{width, height}
 {
 	m_pWindow = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
 	m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, 0);
@@ -162,4 +163,9 @@ Utils::Vector2 SDLUtil::GetMousePos() const
 Utils::Rect SDLUtil::GetGrabRect() const
 {
 	return m_GrabRect;
+}
+
+Utils::Vector2 SDLUtil::GetWindowDimensions() const
+{
+	return m_WindowDimensions;
 }
