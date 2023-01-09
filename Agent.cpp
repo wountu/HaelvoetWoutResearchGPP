@@ -9,6 +9,7 @@ Agent::Agent(SDLUtil* pSdl)
 	,m_pSDL{pSdl}
 	,m_Target{}
 	,m_Arrived{false}
+	,m_Path{}
 {
 	m_Position.x = float(rand() % int(pSdl->GetWindowDimensions().x));
 	m_Position.y = float(rand() % int(pSdl->GetWindowDimensions().y));
@@ -21,17 +22,29 @@ Agent::~Agent()
 
 void Agent::Update(float elapsedSec, Utils::Vector2 target)
 {
-	m_Target = target;//Mousepos
+	if (m_Path.size() == 0)
+	{
+		m_Path.push_back(target);
+	}
 
-	if(m_Selected)
-		HandleMovement(elapsedSec);
+	if (m_Target != target)
+	{
+		m_Target = target;//Mousepos
+		
+		std::cout << "test" << "\n";
+	}
+	
+	//if(m_Selected)
+	HandleMovement(elapsedSec);
 
 	//std::cout << m_Position.x << ", " << m_Position.y << "\n";
 }
 
 void Agent::Render() const
 {
+	m_pSDL->ChangeColor(255, 255, 0);
 	m_pSDL->DrawCircle(m_Position, 5.f);
+	m_pSDL->ChangeColor(255, 0, 0);
 	m_pSDL->DrawCircle(m_Target, 2.5f);
 }
 
@@ -49,14 +62,27 @@ void Agent::CheckIfGrabbed(Utils::Rect grabRect)
 void Agent::HandleMovement(float elapsedSec)
 {
 	//std::cout << m_Position.x << ", " << m_Position.y << "\n";
-	const float acceptRadius{ 2.f };
+	const float acceptRadius{ 1.f };
 
-	Utils::Vector2 dirVector{ m_Target - m_Position };
+	Utils::Vector2 dirVector{ m_Path[0] - m_Position};
 	const float length{ dirVector.Length() };
 	dirVector.Normalize();
 
 	if (length < acceptRadius)
+	{
+		std::vector<Utils::Vector2> newPath{};
 		m_Arrived = true;
+		for (size_t idx{}; idx < m_Path.size(); ++idx)
+		{
+			if (idx == 0)
+				continue;
+			else
+			{
+				newPath.push_back(m_Path[idx]);
+			}
+		}
+		m_Path = newPath;
+	}
 	else m_Arrived = false;
 
 	if (m_Arrived)
@@ -74,4 +100,9 @@ bool Agent::IsActivated() const
 Utils::Vector2 Agent::GetPosition() const
 {
 	return m_Position;
+}
+
+bool Agent::HasArrived() const
+{
+	return m_Arrived;
 }

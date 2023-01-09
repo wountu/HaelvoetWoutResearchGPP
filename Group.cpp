@@ -4,6 +4,8 @@
 Group::Group()
 	:m_Agents{}
 	,m_Commander{}
+	,m_State{stateGroup::StateBroken}
+	,m_AllArrived{}
 {
 
 }
@@ -16,6 +18,7 @@ void Group::AddAgent(Agent* pAgent, Utils::Vector2 target)
 {
 	if (m_Agents.size() == 0)
 	{
+		m_State = stateGroup::StateForming;
 		m_Commander.pAgent = pAgent; //If we don't have agents in our group yet, make the first one our commander
 		m_Commander.position = pAgent->GetPosition();
 	}
@@ -51,12 +54,48 @@ void Group::RemoveAgent(Agent* pAgent)
 void Group::Update(float elapsedSec, Utils::Vector2 target)
 {
 	//std::cout << m_Agents.size() << "\n";
+	m_AllArrived = true; //Will reset back to false if a unit hasn't arrived yet
 
-	for (groupAgent agent : m_Agents)
+	if (m_State == stateGroup::StateForming)
 	{
-		agent.target = target;
-		agent.pAgent->Update(elapsedSec, agent.target);
+		for (size_t idx{}; idx < m_Agents.size(); ++idx)
+		{
+			m_Agents[idx].target.x = target.x + (15 * idx);
+			m_Agents[idx].target.y = target.y;
+
+			//std::cout << m_Agents[idx].pAgent->GetPosition().x << ", " << m_Agents[idx].pAgent->GetPosition().y << "\n";
+
+			m_Agents[idx].pAgent->Update(elapsedSec, m_Agents[idx].target);
+			if (!m_Agents[idx].pAgent->HasArrived())
+				m_AllArrived = false;
+		}
+
+		if (m_AllArrived)
+			m_State = stateGroup::StateFormed;
 	}
+
+	if (m_State == stateGroup::StateFormed)
+	{
+		for (size_t idx{}; idx < m_Agents.size(); ++idx)
+		{
+			if (!m_Agents[idx].arrived);
+			m_AllArrived = false;
+			m_State = stateGroup::StateForming;
+		}
+	}
+
+	//switch (m_State)
+	//{
+	//case stateGroup::StateBroken:
+	//	std::cout << "broken" << "\n";
+	//	break;
+	//case stateGroup::StateForming:
+	//	std::cout << "forming" << "\n";
+	//	break;
+	//case stateGroup::StateFormed:
+	//	std::cout << "formed" << "\n";
+	//	break;
+	//}
 }
 
 void Group::Render() const

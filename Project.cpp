@@ -8,6 +8,9 @@
 Project::Project(SDLUtil* pSdl)
 	:m_pFormation{ new Formation{} }
 	,m_pGroup{new Group{}}
+	,m_pSdl{pSdl}
+	,m_DrawPoint{}
+	,m_Graph{ Utils::Vector2{20.f, 20.f},pSdl->GetWindowDimensions().x, pSdl->GetWindowDimensions().y }
 {
 	for (size_t idx{}; idx < m_NrOfAgents; ++idx)
 	{
@@ -32,6 +35,8 @@ Project::~Project()
 
 void Project::Update(float elapsedSec, Utils::Vector2 mousePos, Utils::Rect grabRect)
 {
+	m_DrawPoint = mousePos;
+
 	for (Agent* pAgent : m_pAgents)
 	{
 		pAgent->CheckIfGrabbed(grabRect);
@@ -54,5 +59,8 @@ void Project::Render() const
 		pAgent->Render();
 	}
 
+	m_pSdl->DrawCircle(m_DrawPoint, 2.5f);
+
+	m_Graph.Render(m_pSdl);
 	//m_pGroup->Render();
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+class Pathfinding;
 
 namespace Utils
 {
@@ -23,6 +24,13 @@ namespace Utils
 			newVector.x = x - other.x;
 			newVector.y = y - other.y;
 			return newVector;
+		}
+
+		bool operator!=(const Vector2 other)
+		{
+			if (x == other.x && y == other.y)
+				return false;
+			else return true;
 		}
 
 		Vector2& Normalize()
@@ -65,7 +73,7 @@ namespace Functions
 {
 	static bool IsPointInRect(Utils::Vector2 point, Utils::Rect rect)
 	{
-		if (point.x > rect.startPos.x  && point.x < rect.startPos.x + rect.width)
+		if (point.x > rect.startPos.x && point.x < rect.startPos.x + rect.width)
 		{
 			if (point.y > rect.startPos.y && point.y < rect.startPos.y + rect.height)
 			{
@@ -74,5 +82,6 @@ namespace Functions
 		}
 
 		return false;
-	}
+	};
+
 }

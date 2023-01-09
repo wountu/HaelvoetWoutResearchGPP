@@ -7,9 +7,17 @@ struct groupAgent {
 	Agent* pAgent{};
 	Utils::Vector2 position;
 	Utils::Vector2 target;
+	bool arrived;
 
 	groupAgent() = default;
 	groupAgent(Agent* pAgent, Utils::Vector2 position, Utils::Vector2 target);
+};
+
+enum class stateGroup
+{
+	StateBroken,
+	StateForming,
+	StateFormed
 };
 
 class Group
@@ -31,7 +39,9 @@ public:
 private:
 	std::vector<groupAgent> m_Agents;
 	groupAgent m_Commander;
-
 	std::vector<Utils::Vector2> m_Targets;
+
+	stateGroup m_State;
+	bool m_AllArrived;
 };
 

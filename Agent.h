@@ -1,5 +1,6 @@
 #pragma once
 #include "Utils.h"
+#include <vector>
 
 class SDLUtil;
 
@@ -19,14 +20,18 @@ public:
 	void CheckIfGrabbed(Utils::Rect grabRect);
 
 	bool IsActivated() const;
+	bool HasArrived() const;
 	Utils::Vector2 GetPosition() const;
 private:
 	Utils::Vector2 m_Position;
 	const float m_MaxSpeed;
-	bool m_Selected; //If he needs to react
 	Utils::Vector2 m_Target;
-	SDLUtil* m_pSDL;
+	std::vector<Utils::Vector2> m_Path;
+
+	bool m_Selected; //If he needs to react
 	bool m_Arrived;
+
+	SDLUtil* m_pSDL;
 
 	void HandleMovement(float elapsedSec);
 };

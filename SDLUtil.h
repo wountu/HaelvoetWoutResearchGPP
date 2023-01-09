@@ -20,6 +20,9 @@ public:
 
 	void DrawCircle(Utils::Vector2 centre, float radius) const;
 	void DrawRect(Utils::Rect rect) const;
+	void DrawLine(Utils::Vector2 point1, Utils::Vector2 point2) const;
+
+	void ChangeColor(Uint8 r, Uint8 g, Uint8 b);
 
 	Utils::Vector2 GetMousePos() const;
 	Utils::Rect GetGrabRect() const;

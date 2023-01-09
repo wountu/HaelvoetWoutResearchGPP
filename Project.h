@@ -1,11 +1,13 @@
 #pragma once
 #include "Utils.h"
+#include "PathFinding.h"
 #include <vector>
 
 class Formation;
 class Agent;
 class SDLUtil;
 class Group;
+//class PathFinding;
 
 class Project
 {
@@ -26,7 +28,10 @@ private:
 	std::vector<Agent*> m_pAgents{};
 	Group* m_pGroup;
 	Formation* m_pFormation;
+	SDLUtil* m_pSdl;
+	Graph m_Graph;
 
+	Utils::Vector2 m_DrawPoint;
 	const int m_NrOfAgents{ 10 };
 };
 

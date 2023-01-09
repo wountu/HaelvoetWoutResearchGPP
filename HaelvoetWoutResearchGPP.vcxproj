@@ -146,6 +146,7 @@
     <ClCompile Include="Formation.cpp" />
     <ClCompile Include="Group.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PathFinding.cpp" />
     <ClCompile Include="Project.cpp" />
     <ClCompile Include="SDLUtil.cpp" />
   </ItemGroup>
@@ -153,6 +154,7 @@
     <ClInclude Include="Agent.h" />
     <ClInclude Include="Formation.h" />
     <ClInclude Include="Group.h" />
+    <ClInclude Include="PathFinding.h" />
     <ClInclude Include="Project.h" />
     <ClInclude Include="SDLUtil.h" />
     <ClInclude Include="Utils.h" />

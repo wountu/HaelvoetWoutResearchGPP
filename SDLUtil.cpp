@@ -11,6 +11,7 @@ SDLUtil::SDLUtil(const char* title, const int width, const int height)
 {
 	m_pWindow = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
 	m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, 0);
+	SDL_SetRenderDrawColor(m_pRenderer, 255, 0, 0, 255);
 }
 
 SDLUtil::~SDLUtil()
@@ -110,8 +111,6 @@ void SDLUtil::Render() const
 
 void SDLUtil::DrawCircle(Utils::Vector2 centre, float radius) const
 {
-	SDL_SetRenderDrawColor(m_pRenderer, 255, 0, 0, 255);
-
 	const float diameter{ radius * 2.f };
 
 	float x{ radius - 1 };
@@ -155,6 +154,11 @@ void SDLUtil::DrawRect(Utils::Rect rect) const
 	SDL_RenderDrawLine(m_pRenderer, rect.startPos.x, rect.startPos.y + rect.height, rect.startPos.x + rect.width, rect.startPos.y + rect.height);
 }
 
+void SDLUtil::DrawLine(Utils::Vector2 point1, Utils::Vector2 point2) const
+{
+	SDL_RenderDrawLine(m_pRenderer, point1.x, point1.y, point2.x, point2.y);
+}
+
 Utils::Vector2 SDLUtil::GetMousePos() const
 {
 	return m_TargetPos;
@@ -168,4 +172,9 @@ Utils::Rect SDLUtil::GetGrabRect() const
 Utils::Vector2 SDLUtil::GetWindowDimensions() const
 {
 	return m_WindowDimensions;
+}
+
+void SDLUtil::ChangeColor(Uint8 r, Uint8 g, Uint8 b)
+{
+	SDL_SetRenderDrawColor(m_pRenderer, r, g, b, 255);
 }
