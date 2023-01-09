@@ -13,9 +13,10 @@ struct helper
 struct Node
 {
 	Utils::Vector2 leftTop{};
-	const float width{};
-	const float height{};
+	float width{};
+	float height{};
 	int idx{};
+	int cost{ 1 };
 	
 	Utils::Vector2 centrePoint{};
 	std::vector<Node> neighbours{};
@@ -82,6 +83,28 @@ struct Node
 
 		return neighbours;
 	}
+
+	void operator=(const Node& other)
+	{
+		leftTop = other.leftTop;
+		width = other.width;
+		height = other.height;
+		idx = other.idx;
+		cost = other.cost;
+		centrePoint = other.centrePoint;
+		neighbours = other.neighbours;
+	}
+
+	bool operator==(const Node& other) const
+	{
+		return leftTop == other.leftTop
+			&& width == other.width
+			&& height == other.height
+			&& idx == other.idx
+			&& cost == other.cost
+			&& centrePoint == other.centrePoint
+			&& neighbours == other.neighbours;
+	}
 };
 
 struct Connection {
@@ -94,6 +117,12 @@ struct Connection {
 	void Render(SDLUtil* pSdl) const
 	{
 		pSdl->DrawLine(from.centrePoint, to.centrePoint);
+	}
+
+	void operator=(const Connection& other) 
+	{
+		from = other.from;
+		to = other.to;
 	}
 };
 
@@ -152,9 +181,33 @@ struct Graph
 	}
 };
 
+struct NodeRecord {
+	Node node{};
+	Connection connection{};
+	float costSoFar{ 0.f };
+	float estimatedTotalCost{0.f};
+
+	NodeRecord() = default;
+	NodeRecord(Node _node, Connection _connection, float cost, float heuristic)
+		: node{ _node }, connection{ _connection }, costSoFar{ cost }, estimatedTotalCost{ heuristic }{};
+
+	void operator=(const NodeRecord& other)
+	{
+		node = other.node;
+		connection = other.connection;
+		costSoFar = other.costSoFar;
+		estimatedTotalCost = other.estimatedTotalCost;
+	};
+
+	bool operator<(const NodeRecord& other) const
+	{
+		return estimatedTotalCost < other.estimatedTotalCost;
+	};
+};
 
 namespace pathfinding
 {
-	std::vector<Utils::Vector2> CalculatePath(Utils::Vector2 point, std::vector<Node> nodes);
+	std::vector<Utils::Vector2> CalculatePath(Utils::Vector2 startPos, Utils::Vector2 point, std::vector<Node> nodes);
+	float GetHeuristicCost(Utils::Vector2 start, Utils::Vector2 end);
 }
 

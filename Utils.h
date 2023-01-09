@@ -26,11 +26,16 @@ namespace Utils
 			return newVector;
 		}
 
-		bool operator!=(const Vector2 other)
+		bool operator!=(const Vector2 other) const
 		{
 			if (x == other.x && y == other.y)
 				return false;
 			else return true;
+		}
+
+		bool operator==(const Vector2& other) const
+		{
+			return x == other.x && y == other.y;
 		}
 
 		Vector2& Normalize()

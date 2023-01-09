@@ -25,13 +25,13 @@ void Agent::Update(float elapsedSec, Utils::Vector2 target, Graph graph)
 {
 	if (m_Path.size() == 0)
 	{
-		m_Path = pathfinding::CalculatePath(target, graph.nodes);
+		m_Path = pathfinding::CalculatePath(m_Position, target, graph.nodes);
 	}
 
 	if (m_Target != target)
 	{
 		m_Target = target;//Mousepos
-		m_Path = pathfinding::CalculatePath(target, graph.nodes);
+		m_Path = pathfinding::CalculatePath(m_Position, target, graph.nodes);
 
 		std::cout << "test" << "\n";
 	}
