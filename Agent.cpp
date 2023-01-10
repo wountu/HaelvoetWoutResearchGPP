@@ -66,6 +66,9 @@ void Agent::HandleMovement(float elapsedSec)
 	//std::cout << m_Position.x << ", " << m_Position.y << "\n";
 	const float acceptRadius{ 1.f };
 
+	if (m_Path.size() == 0)
+		return;
+
 	Utils::Vector2 dirVector{ m_Path[0] - m_Position};
 	const float length{ dirVector.Length() };
 	dirVector.Normalize();

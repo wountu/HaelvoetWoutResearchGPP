@@ -65,7 +65,7 @@ struct Node
 
 		Utils::Vector2 topRightNeigbour{};
 		topRightNeigbour.x = centrePoint.x + width;
-		topRightNeigbour.y = centrePoint.y + height;
+		topRightNeigbour.y = centrePoint.y - height;
 		if (Functions::IsPointInRect(topRightNeigbour, screen))
 		{
 			Node topRight{ help.GetNodeOnPoint(topRightNeigbour, nodes) };
@@ -79,6 +79,42 @@ struct Node
 		{
 			Node left{ help.GetNodeOnPoint(leftNeigbour, nodes) };
 			neighbours.push_back(left);
+		}
+
+		Utils::Vector2 rightNeighbour{};
+		rightNeighbour.x = centrePoint.x + width;
+		rightNeighbour.y = centrePoint.y;
+		if (Functions::IsPointInRect(rightNeighbour, screen))
+		{
+			Node right{ help.GetNodeOnPoint(rightNeighbour, nodes) };
+			neighbours.push_back(right);
+		}
+
+		Utils::Vector2 botLeft{};
+		botLeft.x = centrePoint.x - width;
+		botLeft.y = centrePoint.y + height;
+		if (Functions::IsPointInRect(botLeft, screen))
+		{
+			Node botLeftNode{ help.GetNodeOnPoint(botLeft, nodes) };
+			neighbours.push_back(botLeftNode);
+		}
+
+		Utils::Vector2 bot{};
+		bot.x = centrePoint.x;
+		bot.y = centrePoint.y + height;
+		if (Functions::IsPointInRect(bot, screen))
+		{
+			Node botNode{ help.GetNodeOnPoint(bot, nodes) };
+			neighbours.push_back(botNode);
+		}
+
+		Utils::Vector2 botRight{};
+		botRight.x = centrePoint.x + width;
+		botRight.y = centrePoint.y + height;
+		if (Functions::IsPointInRect(botRight, screen))
+		{
+			Node botRightNode{ help.GetNodeOnPoint(botRight, nodes) };
+			neighbours.push_back(botRightNode);
 		}
 
 		return neighbours;
@@ -105,6 +141,17 @@ struct Node
 			&& centrePoint == other.centrePoint
 			&& neighbours == other.neighbours;
 	}
+
+	bool operator!=(const Node& other) const
+	{
+		return leftTop != other.leftTop
+			|| width != other.width
+			|| height != other.height
+			|| idx != other.idx
+			|| cost != other.cost
+			|| centrePoint != other.centrePoint
+			|| neighbours != other.neighbours;
+	}
 };
 
 struct Connection {
@@ -123,6 +170,12 @@ struct Connection {
 	{
 		from = other.from;
 		to = other.to;
+	}
+
+	bool operator==(const Connection& other) const
+	{
+		return from == other.from
+			&& to == other.to;
 	}
 };
 
@@ -154,15 +207,31 @@ struct Graph
 			nodes.push_back(Node(leftTop, nodeDimension.x, nodeDimension.y, idx));
 		}
 
-		for (Node node : nodes)
+		//for (size_t idx{}; idx < nodes.size(); ++idx)
+		//{
+		//	if (idx > 50)
+		//	{
+		//		std::cout << "test" << "\n";
+		//	}
+		//	nodes[idx].GetNeighbours(nodes, width, height);
+
+		//	for (const Node& neigbourNode : nodes[idx].neighbours)
+		//	{
+		//		connections.push_back(Connection(nodes[idx], neigbourNode));
+		//	}
+		//	//std::cout << nodes[0].neighbours.size() << "\n";
+		//	std::cout << idx << "\n";
+		//}
+
+		/*for (Node node : nodes)
 		{
 			node.GetNeighbours(nodes, width, height);
 
 			for (const Node& neigbourNode : node.neighbours)
 			{
-				connections.push_back(Connection( node, neigbourNode ));
+				connections.push_back(Connection(node, neigbourNode));
 			}
-		}
+		}*/
 	};
 
 	void Render(SDLUtil* pSdl) const
@@ -203,6 +272,14 @@ struct NodeRecord {
 	{
 		return estimatedTotalCost < other.estimatedTotalCost;
 	};
+
+	bool operator==(const NodeRecord& other) const
+	{
+		return node == other.node
+			&& connection == other.connection
+			&& costSoFar == other.costSoFar
+			&& estimatedTotalCost == other.estimatedTotalCost;
+	}
 };
 
 namespace pathfinding
