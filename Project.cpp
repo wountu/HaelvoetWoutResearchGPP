@@ -61,6 +61,7 @@ void Project::Render() const
 
 	m_pSdl->DrawCircle(m_DrawPoint, 2.5f);
 
-	m_Graph.Render(m_pSdl);
+	if(m_pSdl->GetRenderGraph())
+		m_Graph.Render(m_pSdl);
 	//m_pGroup->Render();
 }

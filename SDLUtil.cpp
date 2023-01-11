@@ -8,6 +8,7 @@ SDLUtil::SDLUtil(const char* title, const int width, const int height)
 	,m_StartGrabPos{}
 	,m_ActiveGrabPos{}
 	,m_WindowDimensions{width, height}
+	, m_RenderGraph{false}
 {
 	m_pWindow = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
 	m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, 0);
@@ -76,6 +77,11 @@ void SDLUtil::Event()
 			m_Grabbing = false;
 		}
 		break;
+	case SDL_KEYDOWN:
+		if(SDL_SCANCODE_F1)
+		{
+			m_RenderGraph = !m_RenderGraph;
+		}
 	}
 
 	if (m_Grabbing)
@@ -177,4 +183,9 @@ Utils::Vector2 SDLUtil::GetWindowDimensions() const
 void SDLUtil::ChangeColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
 	SDL_SetRenderDrawColor(m_pRenderer, r, g, b, a);
+}
+
+bool SDLUtil::GetRenderGraph() const
+{
+	return m_RenderGraph;
 }

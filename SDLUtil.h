@@ -29,6 +29,8 @@ public:
 
 	bool Exit() const { return m_Exit; }
 	Utils::Vector2 GetWindowDimensions() const;
+
+	bool GetRenderGraph() const;
 private:
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
@@ -39,5 +41,7 @@ private:
 	bool m_Grabbing; //Holding right mouse button to grab agents
 	Utils::Vector2 m_StartGrabPos, m_ActiveGrabPos;
 	Utils::Vector2 m_WindowDimensions;
+
+	bool m_RenderGraph;
 };
 
