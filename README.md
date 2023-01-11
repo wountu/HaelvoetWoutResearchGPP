@@ -22,4 +22,9 @@ But the preperations are there(you can render the graph by clicking any button).
 
 ![image](https://user-images.githubusercontent.com/70692426/211925030-5132d04b-6c44-441c-a1a2-bd64daee2769.png)
 
+Controls:
+  RMB and drag to select an agent(add them to a group). (Do it slow or it might not pick up the agent).
+  LMB to set a new target to run at
+  Any button to render the graph
+  
 So in the future I will try and finish this project and also add collision between the agents.
