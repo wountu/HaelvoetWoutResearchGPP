@@ -7,7 +7,7 @@ struct Node;
 
 struct helper
 {
-	Node GetNodeOnPoint(Utils::Vector2 point, std::vector<Node> nodes);
+	Node GetNodeOnPoint(Utils::Vector2 point, std::vector<Node> nodes, float width, float height, int rows, int cols);
 };
 
 struct Node
@@ -16,7 +16,8 @@ struct Node
 	float width{};
 	float height{};
 	int idx{};
-	int cost{ 1 };
+	int cost{ 20 };
+	bool visited{};
 	
 	Utils::Vector2 centrePoint{};
 	std::vector<Node> neighbours{};
@@ -40,7 +41,7 @@ struct Node
 		idx = index;
 	}
 
-	std::vector<Node> GetNeighbours(std::vector<Node> nodes, float maxWidth, float maxHeight)
+	std::vector<Node> GetNeighbours(std::vector<Node> nodes, float maxWidth, float maxHeight, int rows, int cols)
 	{
 		helper help{};
 		Utils::Rect screen{ Utils::Vector2{0,0}, maxWidth, maxHeight };
@@ -50,7 +51,7 @@ struct Node
 		leftTopNeighbour.y = centrePoint.y - height;
 		if (Functions::IsPointInRect(leftTopNeighbour, screen))
 		{
-			Node topLeft{ help.GetNodeOnPoint(leftTopNeighbour, nodes) };
+			Node topLeft{ help.GetNodeOnPoint(leftTopNeighbour, nodes, maxWidth, maxHeight, rows, cols) };
 			neighbours.push_back(topLeft);
 		}
 
@@ -59,7 +60,7 @@ struct Node
 		topNeigbour.y = centrePoint.y - height;
 		if (Functions::IsPointInRect(topNeigbour, screen))
 		{
-			Node top{ help.GetNodeOnPoint(topNeigbour, nodes) };
+			Node top{ help.GetNodeOnPoint(topNeigbour, nodes, maxWidth, maxHeight, rows, cols) };
 			neighbours.push_back(top);
 		}
 
@@ -68,7 +69,7 @@ struct Node
 		topRightNeigbour.y = centrePoint.y - height;
 		if (Functions::IsPointInRect(topRightNeigbour, screen))
 		{
-			Node topRight{ help.GetNodeOnPoint(topRightNeigbour, nodes) };
+			Node topRight{ help.GetNodeOnPoint(topRightNeigbour, nodes, maxWidth, maxHeight, rows, cols) };
 			neighbours.push_back(topRight);
 		}
 		
@@ -77,7 +78,7 @@ struct Node
 		leftNeigbour.y = centrePoint.y;
 		if (Functions::IsPointInRect(leftNeigbour, screen))
 		{
-			Node left{ help.GetNodeOnPoint(leftNeigbour, nodes) };
+			Node left{ help.GetNodeOnPoint(leftNeigbour, nodes, maxWidth, maxHeight, rows, cols) };
 			neighbours.push_back(left);
 		}
 
@@ -86,7 +87,7 @@ struct Node
 		rightNeighbour.y = centrePoint.y;
 		if (Functions::IsPointInRect(rightNeighbour, screen))
 		{
-			Node right{ help.GetNodeOnPoint(rightNeighbour, nodes) };
+			Node right{ help.GetNodeOnPoint(rightNeighbour, nodes, maxWidth, maxHeight, rows, cols) };
 			neighbours.push_back(right);
 		}
 
@@ -95,7 +96,7 @@ struct Node
 		botLeft.y = centrePoint.y + height;
 		if (Functions::IsPointInRect(botLeft, screen))
 		{
-			Node botLeftNode{ help.GetNodeOnPoint(botLeft, nodes) };
+			Node botLeftNode{ help.GetNodeOnPoint(botLeft, nodes, maxWidth, maxHeight, rows, cols) };
 			neighbours.push_back(botLeftNode);
 		}
 
@@ -104,7 +105,7 @@ struct Node
 		bot.y = centrePoint.y + height;
 		if (Functions::IsPointInRect(bot, screen))
 		{
-			Node botNode{ help.GetNodeOnPoint(bot, nodes) };
+			Node botNode{ help.GetNodeOnPoint(bot, nodes, maxWidth, maxHeight, rows, cols) };
 			neighbours.push_back(botNode);
 		}
 
@@ -113,7 +114,7 @@ struct Node
 		botRight.y = centrePoint.y + height;
 		if (Functions::IsPointInRect(botRight, screen))
 		{
-			Node botRightNode{ help.GetNodeOnPoint(botRight, nodes) };
+			Node botRightNode{ help.GetNodeOnPoint(botRight, nodes, maxWidth, maxHeight, rows, cols) };
 			neighbours.push_back(botRightNode);
 		}
 
@@ -207,21 +208,18 @@ struct Graph
 			nodes.push_back(Node(leftTop, nodeDimension.x, nodeDimension.y, idx));
 		}
 
-		//for (size_t idx{}; idx < nodes.size(); ++idx)
-		//{
-		//	if (idx > 50)
-		//	{
-		//		std::cout << "test" << "\n";
-		//	}
-		//	nodes[idx].GetNeighbours(nodes, width, height);
+		for (size_t idx{}; idx < nodes.size(); ++idx)
+		{
+	
+			nodes[idx].GetNeighbours(nodes, width, height, rows, cols);
 
-		//	for (const Node& neigbourNode : nodes[idx].neighbours)
-		//	{
-		//		connections.push_back(Connection(nodes[idx], neigbourNode));
-		//	}
-		//	//std::cout << nodes[0].neighbours.size() << "\n";
-		//	std::cout << idx << "\n";
-		//}
+			//for (const Node& neigbourNode : nodes[idx].neighbours)
+			//{
+			//	connections.push_back(Connection(nodes[idx], neigbourNode));
+			//}
+			//std::cout << nodes[0].neighbours.size() << "\n";
+			//std::cout << idx << "\n";
+		}
 
 		/*for (Node node : nodes)
 		{

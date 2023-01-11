@@ -10,7 +10,7 @@ Project::Project(SDLUtil* pSdl)
 	,m_pGroup{new Group{}}
 	,m_pSdl{pSdl}
 	,m_DrawPoint{}
-	,m_Graph{ Utils::Vector2{20.f, 20.f},pSdl->GetWindowDimensions().x, pSdl->GetWindowDimensions().y }
+	,m_Graph{ Utils::Vector2{40.f, 40.f},pSdl->GetWindowDimensions().x, pSdl->GetWindowDimensions().y }
 {
 	for (size_t idx{}; idx < m_NrOfAgents; ++idx)
 	{

@@ -23,18 +23,19 @@ Agent::~Agent()
 
 void Agent::Update(float elapsedSec, Utils::Vector2 target, Graph graph)
 {
-	if (m_Path.size() == 0)
-	{
-		m_Path = pathfinding::CalculatePath(m_Position, target, graph.nodes);
-	}
+	//if (m_Path.size() == 0)
+	//{
+	//	m_Path = pathfinding::CalculatePath(m_Position, target, graph.nodes);
+	//}
 
-	if (m_Target != target)
-	{
-		m_Target = target;//Mousepos
-		m_Path = pathfinding::CalculatePath(m_Position, target, graph.nodes);
+	//if (m_Target != target)
+	//{
+	//	m_Target = target;//Mousepos
+	//	m_Path = pathfinding::CalculatePath(m_Position, target, graph.nodes);
 
-		std::cout << "test" << "\n";
-	}
+	//	std::cout << "test" << "\n";
+	//}
+	m_Target = target;
 	
 	//if(m_Selected)
 	HandleMovement(elapsedSec);
@@ -66,27 +67,27 @@ void Agent::HandleMovement(float elapsedSec)
 	//std::cout << m_Position.x << ", " << m_Position.y << "\n";
 	const float acceptRadius{ 1.f };
 
-	if (m_Path.size() == 0)
-		return;
+	//if (m_Path.size() == 0)
+	//	return;
 
-	Utils::Vector2 dirVector{ m_Path[0] - m_Position};
+	Utils::Vector2 dirVector{ m_Target - m_Position};
 	const float length{ dirVector.Length() };
 	dirVector.Normalize();
 
 	if (length < acceptRadius)
 	{
-		std::vector<Utils::Vector2> newPath{};
+		//std::vector<Utils::Vector2> newPath{};
 		m_Arrived = true;
-		for (size_t idx{}; idx < m_Path.size(); ++idx)
-		{
-			if (idx == 0)
-				continue;
-			else
-			{
-				newPath.push_back(m_Path[idx]);
-			}
-		}
-		m_Path = newPath;
+		//for (size_t idx{}; idx < m_Path.size(); ++idx)
+		//{
+		//	if (idx == 0)
+		//		continue;
+		//	else
+		//	{
+		//		newPath.push_back(m_Path[idx]);
+		//	}
+		//}
+		//m_Path = newPath;
 	}
 	else m_Arrived = false;
 
