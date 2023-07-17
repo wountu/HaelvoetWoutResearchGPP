@@ -63,5 +63,4 @@ void Project::Render() const
 
 	if(m_pSdl->GetRenderGraph())
 		m_Graph.Render(m_pSdl);
-	//m_pGroup->Render();
 }

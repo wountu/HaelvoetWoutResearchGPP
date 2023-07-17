@@ -31,8 +31,6 @@ private:
 	SDLUtil* m_pSdl;
 	Graph m_Graph;
 
-	bool m_RenderGraph;
-
 	Utils::Vector2 m_DrawPoint;
 	const int m_NrOfAgents{ 10 };
 };

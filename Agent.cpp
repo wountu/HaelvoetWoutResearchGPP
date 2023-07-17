@@ -35,6 +35,10 @@ void Agent::Update(float elapsedSec, Utils::Vector2 target, Graph graph)
 
 	//	std::cout << "test" << "\n";
 	//}
+
+	if(m_Path.empty())
+		m_Path = pathfinding::CalculatePath(m_Position, target, graph.nodes);
+	
 	m_Target = target;
 	
 	//if(m_Selected)

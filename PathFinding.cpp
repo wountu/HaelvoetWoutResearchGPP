@@ -141,7 +141,6 @@ std::vector<Utils::Vector2> pathfinding::CalculatePath(Utils::Vector2 startPos, 
 	//return path;
 
 	//bool allNodesVisited{};
-	//helper help{};
 	//Node endNode{ help.GetNodeOnPoint(point, nodes, 0.f, 0.f, 0, 0) };
 	//Node currentNode{ help.GetNodeOnPoint(startPos, nodes, 0.f, 0.f, 0, 0) };
 
@@ -162,13 +161,64 @@ std::vector<Utils::Vector2> pathfinding::CalculatePath(Utils::Vector2 startPos, 
 	//}
 
 
+	helper help{};
+	std::vector<Utils::Vector2> path{};
+	std::vector<NodeRecord> closedList{};
+	std::vector<NodeRecord> openList{};
+
+	Node startNode{ help.GetNodeOnPoint(startPos, nodes, 0.f, 0.f, 0, 0) };
+	Node endNode{ help.GetNodeOnPoint(point, nodes, 0.f, 0.f, 0, 0) };
+	std::cout << "Node at idx is startnode: " << startNode.idx << "\n";
+	std::cout << "Node at idx is endNode: " << endNode.idx << "\n";
+
+	NodeRecord currentRecord{};
+	currentRecord.node = startNode;
+
+	openList.emplace_back(currentRecord);
+
+	while (!openList.empty())
+	{
+		currentRecord = *std::min_element(openList.begin(), openList.end());
+
+		if (currentRecord.node.idx == endNode.idx)
+		{
+			break;
+		}
+
+		auto neighbours = currentRecord.node.neighbours;
+		std::vector<float> totalCosts{};
+
+		for (const auto& neigbour : neighbours)
+		{
+			float costSoFar = currentRecord.costSoFar + neigbour->cost;
+			float heuristic = GetHeuristicCost(neigbour->centrePoint, endNode.centrePoint);
+			float totalCost = costSoFar + heuristic;
+
+			totalCosts.push_back(totalCost);
+
+			//auto result = std::find(closedList.begin(), closedList.end(), neigbour);
+			//if (result != closedList.end())
+			//{
+			//	//Remove neigbour if cheaper
+			//}
+
+			//result = std::find(openList.begin(), openList.end(), neigbour);
+			//if (result != openList.end())
+			//{
+			//	//Remove neighbour if cheaper
+			//}
+
+			//NodeRecord newRecord{}
+		}
+	}
+
+	//closedList.push_back()
 
 	 return std::vector<Utils::Vector2>{};
 }
 
 float pathfinding::GetHeuristicCost(Utils::Vector2 start, Utils::Vector2 end)
 {
-	Utils::Vector2 toDestination{ end - start };
-	return std::max(abs(toDestination.x), abs(toDestination.y));
+	return abs(start.x - end.x) + abs(start.y - end.y);
 }
 

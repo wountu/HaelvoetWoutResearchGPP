@@ -20,7 +20,7 @@ struct Node
 	bool visited{};
 	
 	Utils::Vector2 centrePoint{};
-	std::vector<Node> neighbours{};
+	std::vector<Node*> neighbours{};
 
 	Node() = default;
 	Node(Utils::Vector2 _leftTop, float _width, float _height, int index) : leftTop(_leftTop), width(_width), height(_height), idx(index)
@@ -41,17 +41,108 @@ struct Node
 		idx = index;
 	}
 
-	std::vector<Node> GetNeighbours(std::vector<Node> nodes, float maxWidth, float maxHeight, int rows, int cols)
+	std::vector<Node> GetNeighbours(std::vector<Node> nodes, int rows, int cols)
 	{
-		helper help{};
-		Utils::Rect screen{ Utils::Vector2{0,0}, maxWidth, maxHeight };
+		std::vector<Node> returnNeighbours{};
+
+		int topIdx{ idx - cols };
+		if (topIdx >= 0)//Still in grid
+		{
+			for (const auto& node : nodes)
+			{
+				if (node.idx == topIdx)
+				{
+					returnNeighbours.emplace_back(node);
+					neighbours.emplace_back(new Node(node));
+				}
+			}
+		}
+
+		int botIdx{ idx + cols };
+		if (botIdx < rows * cols)
+		{
+			for (const auto& node : nodes)
+			{
+				if (node.idx == botIdx)
+				{
+					returnNeighbours.emplace_back(node);
+					neighbours.emplace_back(new Node(node));
+				}
+			}
+		}
+
+		int modulo = idx % cols;
+		if (modulo != 0) //Meaning it's not on the left of the grid
+		{
+			const int topLeftIdx{ topIdx - 1 };
+			const int leftIdx{ idx - 1 };
+			const int botLeftIdx{ botIdx - 1 };
+
+			for (const auto& node : nodes)
+			{
+				if (topLeftIdx == node.idx)
+				{
+					returnNeighbours.emplace_back(node);
+					neighbours.emplace_back(new Node(node));
+				}
+				if (leftIdx == node.idx)
+				{
+					returnNeighbours.emplace_back(node);
+					neighbours.emplace_back(new Node(node));
+				}
+				if (botLeftIdx == node.idx)
+				{
+					returnNeighbours.emplace_back(node);
+					neighbours.emplace_back(new Node(node));
+				}
+			}
+		}
+
+		if (modulo + 1 != cols)//Meaning it's not on the right of the grid
+		{
+			const int topRightIdx{ topIdx + 1 };
+			const int rightIdx{ idx + 1 };
+			const int botRightIdx{ botIdx + 1 };
+
+			for (const auto& node : nodes)
+			{
+				if (topRightIdx == node.idx)
+				{
+					returnNeighbours.emplace_back(node);
+					neighbours.emplace_back(new Node(node));
+				}
+				if (rightIdx == node.idx)
+				{
+					returnNeighbours.emplace_back(node);
+					neighbours.emplace_back(new Node(node));
+				}
+				if (botRightIdx == node.idx)
+				{
+					returnNeighbours.emplace_back(node);
+					neighbours.emplace_back(new Node(node));
+				}
+			}
+		}
+
+
+		return returnNeighbours;
+
+		/*helper help{};
+		Utils::Vector2 window{ 600, 400 };
+		Utils::Rect screen{ Utils::Vector2{0,0}, window.x, window.y };
 
 		Utils::Vector2 leftTopNeighbour{};
 		leftTopNeighbour.x = centrePoint.x - width;
 		leftTopNeighbour.y = centrePoint.y - height;
 		if (Functions::IsPointInRect(leftTopNeighbour, screen))
 		{
-			Node topLeft{ help.GetNodeOnPoint(leftTopNeighbour, nodes, maxWidth, maxHeight, rows, cols) };
+			Node topLeft{ help.GetNodeOnPoint(leftTopNeighbour, nodes, window.x, window.y, rows, cols) };
+			
+			Utils::Vector2 pos{};
+			pos.x = (topLeft.idx * window.x / cols);
+			pos.y = (topLeft.idx * window.y / rows);
+			topLeft.leftTop = pos;
+
 			neighbours.push_back(topLeft);
 		}
 
@@ -60,7 +151,13 @@ struct Node
 		topNeigbour.y = centrePoint.y - height;
 		if (Functions::IsPointInRect(topNeigbour, screen))
 		{
-			Node top{ help.GetNodeOnPoint(topNeigbour, nodes, maxWidth, maxHeight, rows, cols) };
+			Node top{ help.GetNodeOnPoint(topNeigbour, nodes, window.x, window.y, rows, cols) };
+
+			Utils::Vector2 pos{};
+			pos.x = (top.idx * window.x / cols);
+			pos.y = (top.idx * window.y / rows);
+			top.leftTop = pos;
+
 			neighbours.push_back(top);
 		}
 
@@ -69,7 +166,13 @@ struct Node
 		topRightNeigbour.y = centrePoint.y - height;
 		if (Functions::IsPointInRect(topRightNeigbour, screen))
 		{
-			Node topRight{ help.GetNodeOnPoint(topRightNeigbour, nodes, maxWidth, maxHeight, rows, cols) };
+			Node topRight{ help.GetNodeOnPoint(topRightNeigbour, nodes, window.x, window.y, rows, cols) };
+
+			Utils::Vector2 pos{};
+			pos.x = (topRight.idx * window.x / cols);
+			pos.y = (topRight.idx * window.y / rows);
+			topRight.leftTop = pos;
+
 			neighbours.push_back(topRight);
 		}
 		
@@ -78,7 +181,13 @@ struct Node
 		leftNeigbour.y = centrePoint.y;
 		if (Functions::IsPointInRect(leftNeigbour, screen))
 		{
-			Node left{ help.GetNodeOnPoint(leftNeigbour, nodes, maxWidth, maxHeight, rows, cols) };
+			Node left{ help.GetNodeOnPoint(leftNeigbour, nodes, window.x, window.y, rows, cols) };
+
+			Utils::Vector2 pos{};
+			pos.x = (left.idx * window.x / cols);
+			pos.y = (left.idx * window.y / rows);
+			left.leftTop = pos;
+
 			neighbours.push_back(left);
 		}
 
@@ -87,7 +196,13 @@ struct Node
 		rightNeighbour.y = centrePoint.y;
 		if (Functions::IsPointInRect(rightNeighbour, screen))
 		{
-			Node right{ help.GetNodeOnPoint(rightNeighbour, nodes, maxWidth, maxHeight, rows, cols) };
+			Node right{ help.GetNodeOnPoint(rightNeighbour, nodes, window.x, window.y, rows, cols) };
+
+			Utils::Vector2 pos{};
+			pos.x = (right.idx * window.x / cols);
+			pos.y = (right.idx * window.y / rows);
+			right.leftTop = pos;
+
 			neighbours.push_back(right);
 		}
 
@@ -96,7 +211,13 @@ struct Node
 		botLeft.y = centrePoint.y + height;
 		if (Functions::IsPointInRect(botLeft, screen))
 		{
-			Node botLeftNode{ help.GetNodeOnPoint(botLeft, nodes, maxWidth, maxHeight, rows, cols) };
+			Node botLeftNode{ help.GetNodeOnPoint(botLeft, nodes, window.x, window.y, rows, cols) };
+
+			Utils::Vector2 pos{};
+			pos.x = (botLeftNode.idx * window.x / cols);
+			pos.y = (botLeftNode.idx * window.y / rows);
+			botLeftNode.leftTop = pos;
+
 			neighbours.push_back(botLeftNode);
 		}
 
@@ -105,7 +226,13 @@ struct Node
 		bot.y = centrePoint.y + height;
 		if (Functions::IsPointInRect(bot, screen))
 		{
-			Node botNode{ help.GetNodeOnPoint(bot, nodes, maxWidth, maxHeight, rows, cols) };
+			Node botNode{ help.GetNodeOnPoint(bot, nodes, window.x, window.y, rows, cols) };
+
+			Utils::Vector2 pos{};
+			pos.x = (botNode.idx * window.x / cols);
+			pos.y = (botNode.idx * window.y / rows);
+			botNode.leftTop = pos;
+
 			neighbours.push_back(botNode);
 		}
 
@@ -114,11 +241,17 @@ struct Node
 		botRight.y = centrePoint.y + height;
 		if (Functions::IsPointInRect(botRight, screen))
 		{
-			Node botRightNode{ help.GetNodeOnPoint(botRight, nodes, maxWidth, maxHeight, rows, cols) };
+			Node botRightNode{ help.GetNodeOnPoint(botRight, nodes, window.x, window.y, rows, cols) };
+
+			Utils::Vector2 pos{};
+			pos.x = (botRightNode.idx * window.x / cols);
+			pos.y = (botRightNode.idx * window.y / rows);
+			botRightNode.leftTop = pos;
+
 			neighbours.push_back(botRightNode);
 		}
 
-		return neighbours;
+		return neighbours;*/
 	}
 
 	void operator=(const Node& other)
@@ -197,50 +330,50 @@ struct Graph
 	Graph(Utils::Vector2 _nodeDimension, float width, float height)
 		:nodeDimension(_nodeDimension), totalWidth(width), totalHeight(height)
 	{
-		rows = totalWidth / nodeDimension.x;
-		cols = totalHeight / nodeDimension.y;
+		cols = int(totalWidth / nodeDimension.x);
+		rows = int(totalHeight / nodeDimension.y);
 		nrOfNodes = int(rows * cols);
 
 		for (size_t idx{}; idx < nrOfNodes; ++idx)
 		{
-			Utils::Vector2 leftTop{ (idx % rows) * nodeDimension.x, (idx / rows) * nodeDimension.y };
+			Utils::Vector2 leftTop{ (idx % cols) * nodeDimension.x, (idx / cols) * nodeDimension.y };
 
-			nodes.push_back(Node(leftTop, nodeDimension.x, nodeDimension.y, idx));
+			nodes.push_back(Node(leftTop, nodeDimension.x, nodeDimension.y, int(idx)));
 		}
 
 		for (size_t idx{}; idx < nodes.size(); ++idx)
 		{
 	
-			nodes[idx].GetNeighbours(nodes, width, height, rows, cols);
+			nodes[idx].GetNeighbours(nodes, rows, cols);
 
 			//for (const Node& neigbourNode : nodes[idx].neighbours)
 			//{
 			//	connections.push_back(Connection(nodes[idx], neigbourNode));
 			//}
 			//std::cout << nodes[0].neighbours.size() << "\n";
-			//std::cout << idx << "\n";
+			std::cout << idx << "\n";
 		}
 
-		/*for (Node node : nodes)
-		{
-			node.GetNeighbours(nodes, width, height);
-
-			for (const Node& neigbourNode : node.neighbours)
-			{
-				connections.push_back(Connection(node, neigbourNode));
-			}
-		}*/
+		//for (Node& node : nodes)
+		//{
+		//	node.neighbours = node.GetNeighbours(nodes, rows, cols);
+		//	
+		//	//for (const Node& neigbourNode : node.neighbours)
+		//	//{
+		//	//	connections.push_back(Connection(node, neigbourNode));
+		//	//}
+		//}
 	};
 
 	void Render(SDLUtil* pSdl) const
 	{
-		pSdl->ChangeColor(0, 0, 0, 127.f);
+		pSdl->ChangeColor(0, 0, 0, 127);
 		for (const Node& node : nodes)
 		{
 			node.Render(pSdl);
 		}
 
-		pSdl->ChangeColor(255, 255, 255, 127.f);
+		pSdl->ChangeColor(255, 255, 255, 127);
 		for (const Connection& connection : connections)
 		{
 			connection.Render(pSdl);

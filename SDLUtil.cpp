@@ -7,7 +7,7 @@ SDLUtil::SDLUtil(const char* title, const int width, const int height)
 	,m_Grabbing{}
 	,m_StartGrabPos{}
 	,m_ActiveGrabPos{}
-	,m_WindowDimensions{width, height}
+	,m_WindowDimensions{float(width), float(height)}
 	, m_RenderGraph{false}
 {
 	m_pWindow = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
@@ -105,7 +105,7 @@ void SDLUtil::Update()
 
 void SDLUtil::RenderBackground() const
 {
-	SDL_SetRenderDrawColor(m_pRenderer, 177.f, 177.f, 177.f, 255.f);
+	SDL_SetRenderDrawColor(m_pRenderer, 177, 177, 177, 255);
 	SDL_RenderClear(m_pRenderer);  //Back color
 }
 
@@ -127,14 +127,14 @@ void SDLUtil::DrawCircle(Utils::Vector2 centre, float radius) const
 
 	while (x >= y)
 	{
-		SDL_RenderDrawPoint(m_pRenderer, centre.x + x, centre.y - y);
-		SDL_RenderDrawPoint(m_pRenderer, centre.x + x, centre.y + y);
-		SDL_RenderDrawPoint(m_pRenderer, centre.x - x, centre.y - y);
-		SDL_RenderDrawPoint(m_pRenderer, centre.x - x, centre.y + y);
-		SDL_RenderDrawPoint(m_pRenderer, centre.x + y, centre.y - x);
-		SDL_RenderDrawPoint(m_pRenderer, centre.x + y, centre.y + x);
-		SDL_RenderDrawPoint(m_pRenderer, centre.x - y, centre.y - x);
-		SDL_RenderDrawPoint(m_pRenderer, centre.x - y, centre.y + x);
+		SDL_RenderDrawPoint(m_pRenderer, int(centre.x + x), int(centre.y - y));
+		SDL_RenderDrawPoint(m_pRenderer, int(centre.x + x), int(centre.y + y));
+		SDL_RenderDrawPoint(m_pRenderer, int(centre.x - x), int(centre.y - y));
+		SDL_RenderDrawPoint(m_pRenderer, int(centre.x - x), int(centre.y + y));
+		SDL_RenderDrawPoint(m_pRenderer, int(centre.x + y), int(centre.y - x));
+		SDL_RenderDrawPoint(m_pRenderer, int(centre.x + y), int(centre.y + x));
+		SDL_RenderDrawPoint(m_pRenderer, int(centre.x - y), int(centre.y - x));
+		SDL_RenderDrawPoint(m_pRenderer, int(centre.x - y), int(centre.y + x));
 
 		if (error <= 0)
 		{
@@ -154,15 +154,15 @@ void SDLUtil::DrawCircle(Utils::Vector2 centre, float radius) const
 
 void SDLUtil::DrawRect(Utils::Rect rect) const
 {
-	SDL_RenderDrawLine(m_pRenderer, rect.startPos.x, rect.startPos.y, rect.startPos.x, rect.startPos.y + rect.height);
-	SDL_RenderDrawLine(m_pRenderer, rect.startPos.x, rect.startPos.y, rect.startPos.x + rect.width, rect.startPos.y);
-	SDL_RenderDrawLine(m_pRenderer, rect.startPos.x + rect.width, rect.startPos.y, rect.startPos.x + rect.width, rect.startPos.y + rect.height);
-	SDL_RenderDrawLine(m_pRenderer, rect.startPos.x, rect.startPos.y + rect.height, rect.startPos.x + rect.width, rect.startPos.y + rect.height);
+	SDL_RenderDrawLine(m_pRenderer, int(rect.startPos.x), int(rect.startPos.y), int(rect.startPos.x), int(rect.startPos.y + rect.height));
+	SDL_RenderDrawLine(m_pRenderer, int(rect.startPos.x), int(rect.startPos.y), int(rect.startPos.x + rect.width), int(rect.startPos.y));
+	SDL_RenderDrawLine(m_pRenderer, int(rect.startPos.x + rect.width), int(rect.startPos.y), int(rect.startPos.x + rect.width), int(rect.startPos.y + rect.height));
+	SDL_RenderDrawLine(m_pRenderer, int(rect.startPos.x), int(rect.startPos.y + rect.height), int(rect.startPos.x + rect.width), int(rect.startPos.y + rect.height));
 }
 
 void SDLUtil::DrawLine(Utils::Vector2 point1, Utils::Vector2 point2) const
 {
-	SDL_RenderDrawLine(m_pRenderer, point1.x, point1.y, point2.x, point2.y);
+	SDL_RenderDrawLine(m_pRenderer, int(point1.x), int(point1.y), int(point2.x), int(point2.y));
 }
 
 Utils::Vector2 SDLUtil::GetMousePos() const
