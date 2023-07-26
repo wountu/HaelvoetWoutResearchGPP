@@ -41,7 +41,7 @@ void Group::RemoveAgent(Agent* pAgent)
 {
 	for (size_t idx{}; idx < m_Agents.size(); ++idx)
 	{
-		if (m_Agents[idx].pAgent == pAgent);
+		if (m_Agents[idx].pAgent == pAgent)
 		{
 			std::cout << "test" << "\n";
 			m_Agents[idx] = m_Agents[m_Agents.size() - 1];

@@ -8,7 +8,7 @@ class SDLUtil;
 class Agent
 {
 public:
-	Agent(SDLUtil* pSdl);
+	Agent(SDLUtil* pSdl, Graph graph);
 	~Agent();
 
 	Agent(const Agent& other)			 = delete;
@@ -24,9 +24,10 @@ public:
 	bool HasArrived() const;
 	Utils::Vector2 GetPosition() const;
 private:
+	Graph m_Graph;
 	Utils::Vector2 m_Position;
 	const float m_MaxSpeed;
-	Utils::Vector2 m_Target;
+	Utils::Vector2 m_Target, m_Destination;
 	std::vector<Utils::Vector2> m_Path;
 
 	bool m_Selected; //If he needs to react
