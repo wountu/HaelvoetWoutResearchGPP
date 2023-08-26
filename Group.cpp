@@ -7,6 +7,7 @@ Group::Group()
 	,m_State{stateGroup::StateBroken}
 	,m_AllArrived{}
 	,m_Speed{}
+	,m_Formation{FormationType::Line}
 {
 
 }
@@ -68,7 +69,7 @@ void Group::Update(float elapsedSec, Utils::Vector2 target, Graph graph)
 	{
 		for (size_t idx{}; idx < m_Agents.size(); ++idx)
 		{
-			m_Agents[idx].target = CalculateDestinationAgent(target, idx);
+			m_Agents[idx].target = CalculateDestinationAgent(target, static_cast<int>(idx));
 
 			//std::cout << m_Agents[idx].pAgent->GetPosition().x << ", " << m_Agents[idx].pAgent->GetPosition().y << "\n";
 
@@ -141,7 +142,44 @@ float Group::GetSpeed()
 
 Utils::Vector2 Group::CalculateDestinationAgent(Utils::Vector2 startPos, int idx)
 {
-	Utils::Vector2 target{ startPos.x + (12 * idx), startPos.y };
+	Utils::Vector2 target{};
+	const float angleRadTriangle = static_cast<float>(60.f * (M_PI / 180.f) * idx);
+	const float agentDistance = 12;
+	const int triangleRow = static_cast<int>(sqrt(idx));
+	const float circleDegrees{ static_cast<float>((360 / m_Agents.size()) * (M_PI / 180.f))};
+
+	switch (m_Formation)
+	{
+	case FormationType::Line:
+		target.x = startPos.x + (agentDistance * idx);
+		target.y = startPos.y;
+		break;
+	case FormationType::Triangle:
+		target.x = startPos.x - (agentDistance * triangleRow) + ((idx - (triangleRow * triangleRow)) * agentDistance);
+		target.y = startPos.y + agentDistance * triangleRow;
+		break;
+	case FormationType::Circle:
+		if (m_Agents.size() == 1)
+		{
+			target = startPos;
+		}
+		else
+		{
+			target.x = startPos.x + agentDistance * std::cos(circleDegrees * idx);
+			target.y = startPos.y + agentDistance * std::sin(circleDegrees * idx);
+		}
+		break;
+	}
 
 	return target;
+}
+
+void Group::ToggleFormation()
+{
+	int idx = static_cast<int>(m_Formation);
+	++idx;
+	idx %= 3;
+
+	m_Formation = static_cast<FormationType>(idx);
+	m_State = stateGroup::StateForming;
 }

@@ -34,6 +34,9 @@ public:
 	bool GetRenderGraph() const;
 
 	bool ChangeTile(Utils::Vector2 &pos);
+
+	bool ToggleFormation();
+
 private:
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
@@ -49,5 +52,7 @@ private:
 
 	Utils::Vector2 m_TileSelectPos{};
 	bool m_ChangeTileCost{};
+
+	bool m_ToggleFormation{};
 };
 

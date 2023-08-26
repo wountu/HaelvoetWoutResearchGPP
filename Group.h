@@ -21,6 +21,13 @@ enum class stateGroup
 	StateFormed
 };
 
+enum class FormationType
+{
+	Line,
+	Triangle,
+	Circle
+};
+
 class Group
 {
 public:
@@ -42,6 +49,8 @@ public:
 	float GetSpeed();
 
 	Utils::Vector2 CalculateDestinationAgent(Utils::Vector2 startPos, int idx);
+	
+	void ToggleFormation();
 private:
 	std::vector<groupAgent> m_Agents;
 	groupAgent m_Commander;
@@ -49,6 +58,8 @@ private:
 	Utils::Vector2 m_GroupsDestination;
 
 	stateGroup m_State;
+	FormationType m_Formation;
+
 	bool m_AllArrived;
 
 	float m_Speed;

@@ -54,6 +54,9 @@ void Project::Update(float elapsedSec, Utils::Vector2 mousePos, Utils::Rect grab
 	}
 
 	m_pGroup->Update(elapsedSec, mousePos, m_Graph);
+
+	if (m_pSdl->ToggleFormation())
+		m_pGroup->ToggleFormation();
 	//m_pFormation->Update(elapsedSec);
 }
 

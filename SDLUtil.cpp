@@ -19,7 +19,7 @@ SDLUtil::~SDLUtil()
 {
 	SDL_DestroyWindow(m_pWindow);
 	SDL_DestroyRenderer(m_pRenderer);
-	SDL_Quit;
+	SDL_Quit();
 }
 
 void SDLUtil::Event()
@@ -36,6 +36,7 @@ void SDLUtil::Event()
 	}
 
 	m_ChangeTileCost = false;
+	m_ToggleFormation = false;
 
 	switch (event.type)
 	{
@@ -71,8 +72,8 @@ void SDLUtil::Event()
 			SDL_GetMouseState(&x, &y);
 
 			m_ChangeTileCost = true;
-			m_TileSelectPos.x = x;
-			m_TileSelectPos.y = y;
+			m_TileSelectPos.x = static_cast<float>(x);
+			m_TileSelectPos.y = static_cast<float>(y);
 		}
 		break;
 	case SDL_MOUSEBUTTONUP:
@@ -93,6 +94,10 @@ void SDLUtil::Event()
 		if(event.key.keysym.scancode == SDL_SCANCODE_F1)
 		{
 			m_RenderGraph = !m_RenderGraph;
+		}
+		if (event.key.keysym.scancode == SDL_SCANCODE_F2)
+		{
+			m_ToggleFormation = true;
 		}
 		break;
 	}
@@ -214,6 +219,11 @@ SDL_Renderer* SDLUtil::GetRenderer() const
 bool SDLUtil::GetRenderGraph() const
 {
 	return m_RenderGraph;
+}
+
+bool SDLUtil::ToggleFormation()
+{
+	return m_ToggleFormation;
 }
 
 bool SDLUtil::ChangeTile(Utils::Vector2 &pos)
