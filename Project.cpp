@@ -14,7 +14,7 @@ Project::Project(SDLUtil* pSdl)
 {
 	for (size_t idx{}; idx < m_NrOfAgents; ++idx)
 	{
-		m_pAgents.push_back(new Agent{ pSdl });
+		m_pAgents.push_back(new Agent{ pSdl, m_Graph });
 	}
 }
 

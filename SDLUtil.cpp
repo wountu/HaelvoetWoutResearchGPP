@@ -78,10 +78,11 @@ void SDLUtil::Event()
 		}
 		break;
 	case SDL_KEYDOWN:
-		if(SDL_SCANCODE_F1)
+		if(event.key.keysym.scancode == SDL_SCANCODE_F1)
 		{
 			m_RenderGraph = !m_RenderGraph;
 		}
+		break;
 	}
 
 	if (m_Grabbing)

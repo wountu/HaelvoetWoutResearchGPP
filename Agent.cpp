@@ -4,13 +4,14 @@
 #include "PathFinding.h"
 #include <iostream>
 
-Agent::Agent(SDLUtil* pSdl)
+Agent::Agent(SDLUtil* pSdl, Graph graph)
 	:m_MaxSpeed{50.f}
 	,m_Selected{false}
 	,m_pSDL{pSdl}
 	,m_Target{}
 	,m_Arrived{false}
 	,m_Path{}
+	,m_Graph{graph}
 {
 	m_Position.x = float(rand() % int(pSdl->GetWindowDimensions().x));
 	m_Position.y = float(rand() % int(pSdl->GetWindowDimensions().y));
@@ -25,13 +26,16 @@ void Agent::Update(float elapsedSec, Utils::Vector2 target, Graph graph)
 {
 	//if (m_Path.size() == 0)
 	//{
-	//	m_Path = pathfinding::CalculatePath(m_Position, target, graph.nodes);
+	//	m_Path = pathfinding::CalculatePath(m_Position, target, graph.nodes, m_Graph);
+	//	m_Target = m_Path[0];
+	//	std::cout << "Agent calculated the path\n";
 	//}
 
-	//if (m_Target != target)
-	//{
-	//	m_Target = target;//Mousepos
-	//	m_Path = pathfinding::CalculatePath(m_Position, target, graph.nodes);
+	if (m_Destination != target)
+	{
+		m_Destination = target;//Mousepos
+		m_Path = pathfinding::CalculatePath(m_Position, target, graph.nodes, m_Graph);
+		m_Target = m_Path[0];
 
 	//	std::cout << "test" << "\n";
 	//}
@@ -80,18 +84,14 @@ void Agent::HandleMovement(float elapsedSec)
 
 	if (length < acceptRadius)
 	{
-		//std::vector<Utils::Vector2> newPath{};
 		m_Arrived = true;
-		//for (size_t idx{}; idx < m_Path.size(); ++idx)
-		//{
-		//	if (idx == 0)
-		//		continue;
-		//	else
-		//	{
-		//		newPath.push_back(m_Path[idx]);
-		//	}
-		//}
-		//m_Path = newPath;
+
+		m_Path.erase(std::remove(m_Path.begin(), m_Path.end(), m_Target), m_Path.end());
+
+		if (m_Path.empty())
+			return;
+
+		m_Target = m_Path[0];
 	}
 	else m_Arrived = false;
 
