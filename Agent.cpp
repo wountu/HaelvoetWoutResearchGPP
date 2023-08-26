@@ -2,19 +2,26 @@
 #include "Utils.h"
 #include "SDLUtil.h"
 #include "PathFinding.h"
+#include "Group.h"
 #include <iostream>
 
 Agent::Agent(SDLUtil* pSdl, Graph graph)
-	:m_MaxSpeed{50.f}
+	:m_MaxSpeed{50}
+	,m_MinSpeed{30}
 	,m_Selected{false}
 	,m_pSDL{pSdl}
 	,m_Target{}
 	,m_Arrived{false}
 	,m_Path{}
 	,m_Graph{graph}
+	,m_IsInGroup{}
+	,m_pGroup{nullptr}
 {
 	m_Position.x = float(rand() % int(pSdl->GetWindowDimensions().x));
 	m_Position.y = float(rand() % int(pSdl->GetWindowDimensions().y));
+
+	m_Speed = static_cast<float>(m_MinSpeed + rand() % (m_MaxSpeed - m_MinSpeed));
+	std::cout << m_Speed << "\n";
 }
 
 Agent::~Agent()
@@ -31,24 +38,33 @@ void Agent::Update(float elapsedSec, Utils::Vector2 target, Graph graph)
 	//	std::cout << "Agent calculated the path\n";
 	//}
 
-	if (m_Destination != target)
+
+	if (m_Destination != target && m_pGroup->GetState() == stateGroup::StateForming)
 	{
 		m_Destination = target;//Mousepos
 		m_Path = pathfinding::CalculatePath(m_Position, target, graph.nodes, m_Graph);
-		m_Target = m_Path[0];
+		if (!m_Path.empty())
+		{
+			m_Target = m_Path[0];
+			m_Arrived = false;
+		}
+	}
 
-	//	std::cout << "test" << "\n";
-	//}
-
-	if(m_Path.empty())
-		m_Path = pathfinding::CalculatePath(m_Position, target, graph.nodes);
-	
-	m_Target = target;
+	if (m_Path.size() == 0) //At the right square
+	{
+		m_Target = m_Destination;
+	}
 	
 	//if(m_Selected)
 	HandleMovement(elapsedSec);
 
 	//std::cout << m_Position.x << ", " << m_Position.y << "\n";
+}
+
+void Agent::FollowCommander(Utils::Vector2 dir, float elapsedSec)
+{
+	m_Position.x += dir.x * m_pGroup->GetSpeed() * elapsedSec;
+	m_Position.y += dir.y * m_pGroup->GetSpeed() * elapsedSec;
 }
 
 void Agent::Render() const
@@ -75,16 +91,14 @@ void Agent::HandleMovement(float elapsedSec)
 	//std::cout << m_Position.x << ", " << m_Position.y << "\n";
 	const float acceptRadius{ 1.f };
 
-	//if (m_Path.size() == 0)
-	//	return;
-
-	Utils::Vector2 dirVector{ m_Target - m_Position};
-	const float length{ dirVector.Length() };
-	dirVector.Normalize();
+	m_Direction = m_Target - m_Position;
+	const float length{ m_Direction.Length() };
+	m_Direction.Normalize();
 
 	if (length < acceptRadius)
 	{
-		m_Arrived = true;
+		if (m_Target == m_Destination)
+			m_Arrived = true;
 
 		m_Path.erase(std::remove(m_Path.begin(), m_Path.end(), m_Target), m_Path.end());
 
@@ -92,14 +106,23 @@ void Agent::HandleMovement(float elapsedSec)
 			return;
 
 		m_Target = m_Path[0];
+
+		return;
 	}
-	else m_Arrived = false;
+
 
 	if (m_Arrived)
 		return;
 
-	m_Position.x += dirVector.x * (m_MaxSpeed * elapsedSec);
-	m_Position.y += dirVector.y * (m_MaxSpeed * elapsedSec);
+	float speed{};
+	if (m_pGroup && m_pGroup->GetState() == stateGroup::StateFormed)
+	{
+		speed = m_pGroup->GetSpeed();
+	}
+	else speed = m_Speed;
+
+	m_Position.x += m_Direction.x * (speed * elapsedSec);
+	m_Position.y += m_Direction.y * (speed * elapsedSec);
 }
 
 bool Agent::IsActivated() const
@@ -110,6 +133,36 @@ bool Agent::IsActivated() const
 Utils::Vector2 Agent::GetPosition() const
 {
 	return m_Position;
+}
+
+void Agent::SetGroup(Group* pGroup)
+{
+	m_pGroup = pGroup;
+}
+
+float Agent::GetSpeed() const
+{
+	return m_Speed;
+}
+
+void Agent::SetPath(std::vector<Utils::Vector2> path, Utils::Vector2 destination)
+{
+	m_Path = path;
+	m_Target = m_Path[0];
+
+	m_Destination = destination;
+
+	m_Arrived = false;
+}
+
+std::vector<Utils::Vector2> Agent::CalculatePath(Utils::Vector2 target)
+{
+	return pathfinding::CalculatePath(m_Position, target, m_Graph.nodes, m_Graph);
+}
+
+Utils::Vector2 Agent::GetDir() const
+{
+	return m_Direction;
 }
 
 bool Agent::HasArrived() const

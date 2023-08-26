@@ -141,9 +141,10 @@ std::vector<Utils::Vector2> pathfinding::CalculatePath(Utils::Vector2 startPos, 
 		{
 			path.push_back(currentRecord.node.centrePoint);
 
-	//bool allNodesVisited{};
-	//Node endNode{ help.GetNodeOnPoint(point, nodes, 0.f, 0.f, 0, 0) };
-	//Node currentNode{ help.GetNodeOnPoint(startPos, nodes, 0.f, 0.f, 0, 0) };
+			std::vector<Node*> neighbours{ currentRecord.node.GetNeighbours(nodes, graph.totalWidth, graph.totalHeight, graph.rows, graph.cols)};
+			for (Node* node : neighbours)
+			{
+				auto find{ std::find_if(closedList.begin(), closedList.end(), [&](NodeRecord record) {return record.node == *node; }) };
 
 				if (find != closedList.end())
 				{
@@ -151,7 +152,19 @@ std::vector<Utils::Vector2> pathfinding::CalculatePath(Utils::Vector2 startPos, 
 					//if(!closedList.empty())
 					//	closedList.erase(std::remove(closedList.begin(), closedList.end(), currentRecord), closedList.end());
 
+					auto newNode = find;
+					if (!newNode->node.visited)
+					{
+						newNode->node.visited = true;
+						currentRecord = *newNode;
+						break;
+					}
+				}
+			}
+		}
 
+		path.push_back(startNode.centrePoint);
+	}
 
 	std::reverse(path.begin(), path.end());
 	return path;
@@ -159,6 +172,7 @@ std::vector<Utils::Vector2> pathfinding::CalculatePath(Utils::Vector2 startPos, 
 
 float pathfinding::GetHeuristicCost(Utils::Vector2 start, Utils::Vector2 end)
 {
-	return abs(start.x - end.x) + abs(start.y - end.y);
+	Utils::Vector2 toDestination{ end - start };
+	return std::max(abs(toDestination.x), abs(toDestination.y));
 }
 
