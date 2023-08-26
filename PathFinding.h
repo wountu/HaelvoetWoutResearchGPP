@@ -7,7 +7,7 @@ struct Node;
 
 struct helper
 {
-	Node GetNodeOnPoint(Utils::Vector2 point, std::vector<Node> nodes, float width, float height, int rows, int cols, Utils::Vector2 nodeDimensions);
+	Node* GetNodeOnPoint(Utils::Vector2 point, std::vector<Node*> nodes, float width, float height, int rows, int cols, Utils::Vector2 nodeDimensions);
 };
 
 struct Node
@@ -16,7 +16,7 @@ struct Node
 	float width{};
 	float height{};
 	int idx{};
-	int cost{ 20 };
+	int cost{ 1 };
 	bool visited{};
 	
 	Utils::Vector2 centrePoint{};
@@ -41,7 +41,7 @@ struct Node
 		idx = index;
 	}
 
-	std::vector<Node*> GetNeighbours(std::vector<Node> nodes, float maxWidth, float maxHeight, int rows, int cols)
+	std::vector<Node*> GetNeighbours(std::vector<Node*> nodes, float maxWidth, float maxHeight, int rows, int cols)
 	{
 		neighbours.erase(neighbours.begin(), neighbours.end());
 
@@ -50,7 +50,7 @@ struct Node
 
 		if (idx >= cols) //Top neighbours
 		{
-			auto top = new Node{ nodes[idx - cols] };
+			auto top = nodes[idx - cols];
 			neighbours.push_back(top);
 
 			////Left
@@ -73,21 +73,21 @@ struct Node
 		//Left
 		if (idx % cols != 0)
 		{
-			auto left = new Node{ nodes[idx - 1] };
+			auto left = nodes[idx - 1];
 			neighbours.push_back(left);
 		}
 
 		//Right
 		if (idx % cols != cols - 1) 
 		{
-			auto right = new Node{ nodes[idx + 1] };
+			auto right = nodes[idx + 1];
 			neighbours.push_back(right);
 		}
 
 		//Bottom
 		if (idx < (cols * rows) - cols)
 		{
-			auto bot = new Node{ nodes[idx + cols] };
+			auto bot = nodes[idx + cols];
 			neighbours.push_back(bot);
 
 			////Left
@@ -257,7 +257,7 @@ struct Graph
 	int rows{};
 	int cols{};
 	int nrOfNodes;
-	std::vector<Node> nodes{};
+	std::vector<Node*> nodes{};
 	std::vector<Connection> connections{};
 
 	Graph() = default;
@@ -272,45 +272,32 @@ struct Graph
 		{
 			Utils::Vector2 leftTop{ (idx % cols) * nodeDimension.x, (idx / cols) * nodeDimension.y };
 
-			nodes.push_back(Node(leftTop, nodeDimension.x, nodeDimension.y, int(idx)));
+			nodes.push_back(new Node(leftTop, nodeDimension.x, nodeDimension.y, int(idx)));
 		}
-
-		for (size_t idx{}; idx < nodes.size(); ++idx)
-		{
-	
-			//nodes[idx].GetNeighbours(nodes, width, height, rows, cols);
-
-			//for (const Node& neigbourNode : nodes[idx].neighbours)
-			//{
-			//	connections.push_back(Connection(nodes[idx], neigbourNode));
-			//}
-			//std::cout << nodes[0].neighbours.size() << "\n";
-			//std::cout << idx << "\n";
-		}
-
-		/*for (Node node : nodes)
-		{
-			node.GetNeighbours(nodes, width, height);
-
-			for (const Node& neigbourNode : node.neighbours)
-			{
-				connections.push_back(Connection(node, neigbourNode));
-			}
-		}*/
 	};
 
 	void Render(SDLUtil* pSdl) const
 	{
 		pSdl->ChangeColor(0, 0, 0, 127);
-		for (const Node& node : nodes)
+		for (const Node* node : nodes)
 		{
-			node.Render(pSdl);
-		}
+			if (node->cost > 5)
+			{
+				SDL_Rect* pRect{ new SDL_Rect{} };
+				pRect->x = static_cast<int>(node->leftTop.x);
+				pRect->y = static_cast<int>(node->leftTop.y);
+				pRect->w = static_cast<int>(node->width);
+				pRect->h = static_cast<int>(node->height);
 
-		pSdl->ChangeColor(255, 255, 255, 127);
-		for (const Connection& connection : connections)
-		{
-			connection.Render(pSdl);
+				pSdl->ChangeColor(255, 0, 0, 255);
+				SDL_RenderFillRect(pSdl->GetRenderer(), pRect);
+			}
+
+			if (pSdl->GetRenderGraph())
+			{
+				pSdl->ChangeColor(0, 0, 0, 255);
+				node->Render(pSdl);
+			}
 		}
 	}
 };
@@ -349,7 +336,7 @@ struct NodeRecord {
 
 namespace pathfinding
 {
-	std::vector<Utils::Vector2> CalculatePath(Utils::Vector2 startPos, Utils::Vector2 point, std::vector<Node> nodes, Graph graph);
+	std::vector<Utils::Vector2> CalculatePath(Utils::Vector2 startPos, Utils::Vector2 point, std::vector<Node*> nodes, Graph graph);
 	float GetHeuristicCost(Utils::Vector2 start, Utils::Vector2 end);
 }
 

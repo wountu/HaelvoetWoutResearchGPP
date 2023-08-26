@@ -2,38 +2,25 @@
 #include "Utils.h"
 #include <algorithm>
 
-Node helper::GetNodeOnPoint(Utils::Vector2 point, std::vector<Node> nodes, float width, float height, int rows, int cols, Utils::Vector2 nodeDimensions)
+Node* helper::GetNodeOnPoint(Utils::Vector2 point, std::vector<Node*> nodes, float width, float height, int rows, int cols, Utils::Vector2 nodeDimensions)
 {
 	const float nodeW{ 40 }, nodeH{ 40 };
 
 	if (width == 0 || height == 0 || cols == 0 || rows == 0)
 	{
 
-		for (const Node& node : nodes)
+		for (Node* node : nodes)
 		{
-			Utils::Rect rect(node.leftTop, node.width, node.height);
+			Utils::Rect rect(node->leftTop, node->width, node->height);
 			if (Functions::IsPointInRect(point, rect))
 				return node;
 		}
-
-	}
-	else
-	{
-		int col{ static_cast<int>(point.x / nodeW) };
-		int row{ static_cast<int>(point.y / nodeH) };
-		int idx{ col * rows + row };
-
-		for (const Node& node : nodes)
-		{
-			if (node.idx == idx)
-				return node;
-		}
 	}
 
-	return Node{};
+	return new Node{};
 };
 
-std::vector<Utils::Vector2> pathfinding::CalculatePath(Utils::Vector2 startPos, Utils::Vector2 point, std::vector<Node> nodes, Graph graph) //AStar
+std::vector<Utils::Vector2> pathfinding::CalculatePath(Utils::Vector2 startPos, Utils::Vector2 point, std::vector<Node*> nodes, Graph graph) //AStar
 {
 	helper help{};
 	std::vector<Utils::Vector2> path{};
@@ -41,13 +28,12 @@ std::vector<Utils::Vector2> pathfinding::CalculatePath(Utils::Vector2 startPos, 
 	std::vector<NodeRecord> closedList{};
 	NodeRecord currentRecord;
 
-	Node startNode{ help.GetNodeOnPoint(startPos, nodes, 0.f, 0.f, 0, 0, Utils::Vector2{ nodes[0].width, nodes[0].height}) };
-	Node endNode{ help.GetNodeOnPoint(point, nodes, 0.f, 0.f, 0, 0, Utils::Vector2{ nodes[0].width, nodes[0].height}) };
+	Node startNode{ *help.GetNodeOnPoint(startPos, nodes, 0.f, 0.f, 0, 0, Utils::Vector2{ nodes[0]->width, nodes[0]->height}) };
+	Node endNode{ *help.GetNodeOnPoint(point, nodes, 0.f, 0.f, 0, 0, Utils::Vector2{ nodes[0]->width, nodes[0]->height}) };
 	openList.push_back(NodeRecord(startNode, Connection{}, 0.f, GetHeuristicCost(startPos, point)));
 
 	while (!openList.empty())
 	{
-		//std::cout << openList.size() << "\n";
 		currentRecord = *std::min_element(openList.begin(), openList.end());
 		Node currentNode{ currentRecord.node };
 

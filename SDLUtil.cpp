@@ -35,6 +35,8 @@ void SDLUtil::Event()
 		m_StartGrabPos.y = 0;
 	}
 
+	m_ChangeTileCost = false;
+
 	switch (event.type)
 	{
 	case SDL_QUIT:
@@ -61,6 +63,16 @@ void SDLUtil::Event()
 				m_Grabbing = true;
 			}
 
+		}
+
+		if (SDL_BUTTON_MIDDLE == event.button.button)
+		{
+			int x, y;
+			SDL_GetMouseState(&x, &y);
+
+			m_ChangeTileCost = true;
+			m_TileSelectPos.x = x;
+			m_TileSelectPos.y = y;
 		}
 		break;
 	case SDL_MOUSEBUTTONUP:
@@ -155,6 +167,14 @@ void SDLUtil::DrawCircle(Utils::Vector2 centre, float radius) const
 
 void SDLUtil::DrawRect(Utils::Rect rect) const
 {
+	//auto SDLRect = new SDL_Rect{};
+	//SDLRect->x = static_cast<float>(rect.startPos.x);
+	//SDLRect->y = static_cast<float>(rect.startPos.y);
+	//SDLRect->w = static_cast<float>(rect.width);
+	//SDLRect->h = static_cast<float>(rect.height);
+
+	//SDL_RenderFillRect(m_pRenderer, SDLRect);
+
 	SDL_RenderDrawLine(m_pRenderer, int(rect.startPos.x), int(rect.startPos.y), int(rect.startPos.x), int(rect.startPos.y + rect.height));
 	SDL_RenderDrawLine(m_pRenderer, int(rect.startPos.x), int(rect.startPos.y), int(rect.startPos.x + rect.width), int(rect.startPos.y));
 	SDL_RenderDrawLine(m_pRenderer, int(rect.startPos.x + rect.width), int(rect.startPos.y), int(rect.startPos.x + rect.width), int(rect.startPos.y + rect.height));
@@ -186,7 +206,22 @@ void SDLUtil::ChangeColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 	SDL_SetRenderDrawColor(m_pRenderer, r, g, b, a);
 }
 
+SDL_Renderer* SDLUtil::GetRenderer() const
+{
+	return m_pRenderer;
+}
+
 bool SDLUtil::GetRenderGraph() const
 {
 	return m_RenderGraph;
+}
+
+bool SDLUtil::ChangeTile(Utils::Vector2 &pos)
+{
+	if (m_ChangeTileCost)
+	{
+		pos = m_TileSelectPos;
+		return true;
+	}
+	else return false;	
 }

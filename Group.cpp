@@ -141,7 +141,7 @@ float Group::GetSpeed()
 
 Utils::Vector2 Group::CalculateDestinationAgent(Utils::Vector2 startPos, int idx)
 {
-	Utils::Vector2 target{ startPos.x + (20 * idx), startPos.y };
+	Utils::Vector2 target{ startPos.x + (12 * idx), startPos.y };
 
 	return target;
 }

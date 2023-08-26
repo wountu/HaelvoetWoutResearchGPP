@@ -30,6 +30,7 @@ private:
 	Formation* m_pFormation;
 	SDLUtil* m_pSdl;
 	Graph m_Graph;
+	helper* m_pHelp;
 
 	Utils::Vector2 m_DrawPoint;
 	const int m_NrOfAgents{ 10 };

@@ -23,6 +23,7 @@ public:
 	void DrawLine(Utils::Vector2 point1, Utils::Vector2 point2) const;
 
 	void ChangeColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+	SDL_Renderer* GetRenderer() const;
 
 	Utils::Vector2 GetMousePos() const;
 	Utils::Rect GetGrabRect() const;
@@ -31,6 +32,8 @@ public:
 	Utils::Vector2 GetWindowDimensions() const;
 
 	bool GetRenderGraph() const;
+
+	bool ChangeTile(Utils::Vector2 &pos);
 private:
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
@@ -43,5 +46,8 @@ private:
 	Utils::Vector2 m_WindowDimensions;
 
 	bool m_RenderGraph;
+
+	Utils::Vector2 m_TileSelectPos{};
+	bool m_ChangeTileCost{};
 };
 

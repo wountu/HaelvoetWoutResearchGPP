@@ -11,6 +11,7 @@ Project::Project(SDLUtil* pSdl)
 	,m_pSdl{pSdl}
 	,m_DrawPoint{}
 	,m_Graph{ Utils::Vector2{40.f, 40.f},pSdl->GetWindowDimensions().x, pSdl->GetWindowDimensions().y }
+	,m_pHelp{ new helper{} }
 {
 	for (size_t idx{}; idx < m_NrOfAgents; ++idx)
 	{
@@ -37,15 +38,19 @@ void Project::Update(float elapsedSec, Utils::Vector2 mousePos, Utils::Rect grab
 {
 	m_DrawPoint = mousePos;
 
+	Utils::Vector2 pos{};
+	if (m_pSdl->ChangeTile(pos))
+	{
+		auto node = m_pHelp->GetNodeOnPoint(pos, m_Graph.nodes, 0.f, 0.f, 0, 0, Utils::Vector2{ m_Graph.nodes[0]->width,  m_Graph.nodes[0]->height });
+		node->cost = 50;
+	}
+
 	for (Agent* pAgent : m_pAgents)
 	{
 		pAgent->CheckIfGrabbed(grabRect);
 
 		if (pAgent->IsActivated())
 			m_pGroup->AddAgent(pAgent, mousePos);
-		//else m_pGroup->RemoveAgent(pAgent); //It will check internally if that agent is in the group
-
-		//pAgent->Update(elapsedSec, mousePos, grabRect);
 	}
 
 	m_pGroup->Update(elapsedSec, mousePos, m_Graph);
@@ -61,6 +66,5 @@ void Project::Render() const
 
 	m_pSdl->DrawCircle(m_DrawPoint, 2.5f);
 
-	if(m_pSdl->GetRenderGraph())
-		m_Graph.Render(m_pSdl);
+	m_Graph.Render(m_pSdl);
 }
