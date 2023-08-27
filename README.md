@@ -13,7 +13,7 @@ In total there are 10 agents, with each their own unique spawnpoint and movement
 
 ![image](https://github.com/wountu/Research_Formations/assets/70692426/a72c6fa3-6e37-4c6f-9eb2-03a43e69d3bb)
 
-3) Next it was time to start on the group logic.
+2) Next it was time to start on the group logic.
 A group has 3 stages:
   * Broken
   * Forming
