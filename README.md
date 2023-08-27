@@ -1,30 +1,77 @@
 # HaelvoetWoutResearchGPP
 
-Topic: Group formation and group movement
+For the course gameplay programming we had the chance to research someting on our own as long as it was related to gameplay programming.
+I chose for the topic Group formation and Group movement.
 
-The topic of choice is group movement and group formation. 
-The goal of this project is to make a group out of multiple agents and let them move together to a new location in a group(see image).
-![image](https://user-images.githubusercontent.com/70692426/211922906-3bae9098-6e02-492f-be64-e788e39e1878.png)
+For me to be able to create an application using group formation and movement, I had to firstly research on how to do it. 
+I followed a guideline on the following site:https://www.gamedeveloper.com/programming/implementing-coordinated-movement.
 
 Implementation:
-My project has been made out of scratch in SDL2. Meaning that everything in this project has been made by me.
 
-My implementation is based on:https://www.gamedeveloper.com/programming/implementing-coordinated-movement. 
+1) My first step was to create the agents. These agents will later be used to form the groups and perform logic on.
+In total there are 10 agents, with each their own unique spawnpoint and movementspeed.
+![image](https://github.com/wountu/Research_Formations/assets/70692426/a72c6fa3-6e37-4c6f-9eb2-03a43e69d3bb)
 
-The first step was to implement a single agent. This single agent should be able to move from 1 point to another. 
-After that I implemted my group. This group contains a commander (first agent of the group), this commander is used for pathfinding;
-  all the other agent's movement target is calculated with the help of the commander.
-The group keeps track wether the group is forming or is already formed(every agent at the target)
-After the group was made they had to move together as a group(thanks to the commander).
+2) Next it was time to start on the group logic.
+A group has 3 stages:
+  * Broken
+  * Forming
+  * Formed
+When the group isn't formed yet(no agents added to the group), the state is in the broken state.
 
-In the end I also wanted to add pathfinding to it with obstacles, but I didn't have enough time to finish this. 
-But the preperations are there(you can render the graph by clicking any button).
+If an agent is selected it will automatically be added to the group, and the group's state will jump to forming.
+While the group is in the forming state, each agent will find it's way to it's relative position of the group.
 
-![image](https://user-images.githubusercontent.com/70692426/211925030-5132d04b-6c44-441c-a1a2-bd64daee2769.png)
+Once all the agents are at their right position, the formation is formed and the groups stage is now formed.
 
-Controls:
-  RMB and drag to select an agent(add them to a group). (Do it slow or it might not pick up the agent).
-  LMB to set a new target to run at
-  Any button to render the graph
-  
-So in the future I will try and finish this project and also add collision between the agents.
+When an agent is added to the group while the state is formed, that state will go back to forming until the new agent is at his right position.
+
+The last important thing is that all agents in the group will now run at the same speed of each other. 
+This makes sure that when a group travels the group doesn't fall apart.
+![Group forming](https://github.com/wountu/Research_Formations/assets/70692426/cfb1cb19-dd2e-4f9b-a78f-a44310dbcd97)
+
+3) Pathfinding
+An important part of group logic is pathfinding, this makes sure that your agents won't run into obstacles.
+There are a lot of pathfinding algorithms out there, but I went with A*.
+
+But for A* to work I first had to create a grid.
+This grid consists of a bunch of tiles, that can easily find their neighbouring tiles.
+![image](https://github.com/wountu/Research_Formations/assets/70692426/e76a3061-0ce1-42d4-80f7-38aee10b0171)
+
+The grid should also be able to be manipulated, so I added that as well. You can turn a tile into an obstacle that the agent's should avoid.
+This is indicated by the red square:
+![image](https://github.com/wountu/Research_Formations/assets/70692426/550a712e-0f60-456c-86b2-4f231d583384)
+
+With the grid in place the A* algorithm can be implemented.
+Now if an agent needs to go to a certain point on the grid, it will take the shortest route that doesn't include an obstacle.
+![PathFinding](https://github.com/wountu/Research_Formations/assets/70692426/01878f1e-d6b4-4362-9f9b-2b82aa9a8796)
+
+4) Group movement
+A group has a commander, which is an agent like any other agent but will be used to calculate the path of the group.
+Once the commander has it's path and starts moving, all the other agents will do the same movement.
+If the commander goes to the right, the other agents goes to the right....
+![GroupMovement](https://github.com/wountu/Research_Formations/assets/70692426/e2cb9d57-1795-4a3d-8384-5c227af31927)
+
+Now as the commander calculates a safe path away from obstacles, doesn't mean that the agent's following the commander won't run into it.
+So once the agent's comes across such an obstacle it will move towards the commander until the obstacles isn't in the way anymore.
+This works because the commander calculated a safe path of obstacles.
+![GroupObstacle](https://github.com/wountu/Research_Formations/assets/70692426/9a867c94-3c86-4d70-af9c-bbf81e392acc)
+
+Like you see in the GIF above, if an agent had to changed it relative position to the group because of an obstacle the group will reform again once arrived at their location.
+
+5) Formations
+For now there was only the line formation, so the last thing I added were different formations.
+* Arrow formation
+* Circle formation
+
+Because the agent follows the commander's position, the formation stays together.
+![Formations](https://github.com/wountu/Research_Formations/assets/70692426/7bc11f64-4f3d-4349-80cb-93cdc063b3e5)
+
+
+
+
+
+
+
+
+
