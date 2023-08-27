@@ -22,7 +22,6 @@ Agent::Agent(SDLUtil* pSdl, Graph graph)
 	m_Position.y = float(rand() % int(pSdl->GetWindowDimensions().y));
 
 	m_Speed = static_cast<float>(m_MinSpeed + rand() % (m_MaxSpeed - m_MinSpeed));
-	std::cout << m_Speed << "\n";
 }
 
 Agent::~Agent()
@@ -99,12 +98,23 @@ void Agent::Render() const
 
 void Agent::CheckIfGrabbed(Utils::Rect grabRect)
 {
+	if (grabRect.width < 0)
+	{
+		grabRect.startPos.x += grabRect.width;
+		grabRect.width *= -1;
+	}
+
+	if (grabRect.height < 0)
+	{
+		grabRect.startPos.y += grabRect.height;
+		grabRect.height *= -1;
+	}
+
 	if (grabRect.width != 0 && grabRect.height != 0) //If we are not grabbing it is resetted to 0
 	{
-		if (Functions::IsPointInRect(m_Position, grabRect))
-		{
+		Utils::Rect agentRect{ m_Position, 5.f, 5.f };
+		if (m_pHelp->AreRectanglesColliding(grabRect, agentRect))
 			m_Selected = true;
-		}
 	}
 }
 
