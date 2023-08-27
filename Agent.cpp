@@ -16,6 +16,7 @@ Agent::Agent(SDLUtil* pSdl, Graph graph)
 	,m_Graph{graph}
 	,m_IsInGroup{}
 	,m_pGroup{nullptr}
+	, m_pHelp{ new helper{} }
 {
 	m_Position.x = float(rand() % int(pSdl->GetWindowDimensions().x));
 	m_Position.y = float(rand() % int(pSdl->GetWindowDimensions().y));
@@ -65,6 +66,27 @@ void Agent::FollowCommander(Utils::Vector2 dir, float elapsedSec)
 {
 	m_Position.x += dir.x * m_pGroup->GetSpeed() * elapsedSec;
 	m_Position.y += dir.y * m_pGroup->GetSpeed() * elapsedSec;
+
+	auto node = m_pHelp->GetNodeOnPoint(m_Position, m_Graph.nodes, 0.f, 0.f, 0, 0, Utils::Vector2{ m_Graph.nodes[0]->width, m_Graph.nodes[0]->height });
+	if (node->cost > 5)
+	{
+		MoveToCommander(elapsedSec);
+	}
+
+	auto nodes = node->GetNeighbours(m_Graph.nodes, m_Graph.totalWidth, m_Graph.totalHeight, m_Graph.rows, m_Graph.cols);
+	for (const auto& neigbour : nodes)
+	{
+		if (neigbour->cost < 5)
+			continue;
+
+		Utils::Rect agentRect{ m_Position, 5.f, 5.f };
+		Utils::Rect tileRect{ neigbour->leftTop, neigbour->width, neigbour->height };
+
+		if (m_pHelp->AreRectanglesColliding(agentRect, tileRect))
+		{
+			MoveToCommander(elapsedSec);
+		}
+	}
 }
 
 void Agent::Render() const
@@ -125,6 +147,17 @@ void Agent::HandleMovement(float elapsedSec)
 	m_Position.y += m_Direction.y * (speed * elapsedSec);
 }
 
+void Agent::MoveToCommander(float elapsedSec)
+{
+	Utils::Vector2 toCom{ m_pGroup->GetCommander()->GetPosition() - m_Position };
+	toCom.Normalize();
+
+	m_Position.x += toCom.x * m_pGroup->GetSpeed() * elapsedSec;
+	m_Position.y += toCom.y * m_pGroup->GetSpeed() * elapsedSec;
+
+	m_pGroup->BrokeFormation();
+}
+
 bool Agent::IsActivated() const
 {
 	return m_Selected;
@@ -147,8 +180,11 @@ float Agent::GetSpeed() const
 
 void Agent::SetPath(std::vector<Utils::Vector2> path, Utils::Vector2 destination)
 {
-	m_Path = path;
-	m_Target = m_Path[0];
+	if(!path.empty())
+	{
+		m_Path = path;
+		m_Target = m_Path[0];
+	}
 
 	m_Destination = destination;
 

@@ -18,7 +18,19 @@ Node* helper::GetNodeOnPoint(Utils::Vector2 point, std::vector<Node*> nodes, flo
 	}
 
 	return new Node{};
-};
+}
+
+bool helper::AreRectanglesColliding(const Utils::Rect& rect, const Utils::Rect& otherRect)
+{
+	if (rect.startPos.x > otherRect.startPos.x + otherRect.width || otherRect.startPos.x > rect.startPos.x + rect.width)
+		return false;
+
+	if(rect.startPos.y + rect.height < otherRect.startPos.y || otherRect.startPos.y + rect.height < rect.startPos.y )
+		return false;
+
+	return true;
+}
+
 
 std::vector<Utils::Vector2> pathfinding::CalculatePath(Utils::Vector2 startPos, Utils::Vector2 point, std::vector<Node*> nodes, Graph graph) //AStar
 {

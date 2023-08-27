@@ -48,9 +48,11 @@ private:
 	bool m_IsInGroup;
 
 	Group* m_pGroup;
+	helper* m_pHelp{};
 
 	SDLUtil* m_pSDL;
 
 	void HandleMovement(float elapsedSec);
+	void MoveToCommander(float elapsedSec);
 };
 

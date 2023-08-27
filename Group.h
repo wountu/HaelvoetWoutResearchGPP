@@ -51,6 +51,10 @@ public:
 	Utils::Vector2 CalculateDestinationAgent(Utils::Vector2 startPos, int idx);
 	
 	void ToggleFormation();
+
+	Agent* GetCommander() const;
+
+	void BrokeFormation();
 private:
 	std::vector<groupAgent> m_Agents;
 	groupAgent m_Commander;
@@ -61,6 +65,7 @@ private:
 	FormationType m_Formation;
 
 	bool m_AllArrived;
+	bool m_FormationBroken;
 
 	float m_Speed;
 };

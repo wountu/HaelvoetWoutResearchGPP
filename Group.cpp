@@ -8,6 +8,7 @@ Group::Group()
 	,m_AllArrived{}
 	,m_Speed{}
 	,m_Formation{FormationType::Line}
+	, m_FormationBroken{}
 {
 
 }
@@ -105,7 +106,15 @@ void Group::Update(float elapsedSec, Utils::Vector2 target, Graph graph)
 					agent.pAgent->FollowCommander(m_Commander.pAgent->GetDir(), elapsedSec);
 				}
 			}
-		}		
+		}
+		else
+		{
+			if (m_FormationBroken)
+			{
+				m_State = stateGroup::StateForming;
+				m_FormationBroken = false;
+			}
+		}
 	}
 
 	//switch (m_State)
@@ -182,4 +191,14 @@ void Group::ToggleFormation()
 
 	m_Formation = static_cast<FormationType>(idx);
 	m_State = stateGroup::StateForming;
+}
+
+Agent* Group::GetCommander() const
+{
+	return m_Commander.pAgent;
+}
+
+void Group::BrokeFormation()
+{
+	m_FormationBroken = true;
 }

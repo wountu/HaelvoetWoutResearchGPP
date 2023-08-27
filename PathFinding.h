@@ -8,6 +8,7 @@ struct Node;
 struct helper
 {
 	Node* GetNodeOnPoint(Utils::Vector2 point, std::vector<Node*> nodes, float width, float height, int rows, int cols, Utils::Vector2 nodeDimensions);
+	bool AreRectanglesColliding(const Utils::Rect& rect, const Utils::Rect& otherRect);
 };
 
 struct Node
