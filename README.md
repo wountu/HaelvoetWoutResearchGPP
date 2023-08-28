@@ -36,6 +36,7 @@ This makes sure that when a group travels the group doesn't fall apart.
 ![Group forming](https://github.com/wountu/Research_Formations/assets/70692426/cfb1cb19-dd2e-4f9b-a78f-a44310dbcd97)
 
 3) Pathfinding
+   
 An important part of group logic is pathfinding, this makes sure that your agents won't run into obstacles.
 There are a lot of pathfinding algorithms out there, but I went with A*.
 
@@ -55,6 +56,7 @@ Now if an agent needs to go to a certain point on the grid, it will take the sho
 ![PathFinding](https://github.com/wountu/Research_Formations/assets/70692426/01878f1e-d6b4-4362-9f9b-2b82aa9a8796)
 
 4) Group movement
+   
 A group has a commander, which is an agent like any other agent but will be used to calculate the path of the group.
 Once the commander has it's path and starts moving, all the other agents will do the same movement.
 If the commander goes to the right, the other agents goes to the right....
@@ -70,6 +72,7 @@ This works because the commander calculated a safe path of obstacles.
 Like you see in the GIF above, if an agent had to changed it relative position to the group because of an obstacle the group will reform again once arrived at their location.
 
 5) Formations
+   
 For now there was only the line formation, so the last thing I added were different formations.
 * Arrow formation
 * Circle formation
