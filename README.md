@@ -8,12 +8,15 @@ I followed a guideline on the following site:https://www.gamedeveloper.com/progr
 
 Implementation:
 
-1) My first step was to create the agents. These agents will later be used to form the groups and perform logic on.
+1) My first step was to create the agents.
+ 
+These agents will later be used to form the groups and perform logic on.
 In total there are 10 agents, with each their own unique spawnpoint and movementspeed.
 
 ![image](https://github.com/wountu/Research_Formations/assets/70692426/a72c6fa3-6e37-4c6f-9eb2-03a43e69d3bb)
 
 2) Next it was time to start on the group logic.
+
 A group has 3 stages:
   * Broken
   * Forming
@@ -76,7 +79,12 @@ Because the agent follows the commander's position, the formation stays together
 ![Formations](https://github.com/wountu/Research_Formations/assets/70692426/7bc11f64-4f3d-4349-80cb-93cdc063b3e5)
 
 
+Result: After all that we have a group that can travel in formation and easily change it's formation. 
+This can be used in a ton of RTS-Games to simulate an army marching/moving around.
 
+Future Work: In the future i would like to add collision-handling between the agents.
+Now the agents doesn't have collisions so they can still run into each other.
+This is obviously not that realistic and is sometghing I might want to change in the future.
 
 
 
