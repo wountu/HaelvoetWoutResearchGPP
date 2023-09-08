@@ -21,6 +21,7 @@ A group has 3 stages:
   * Broken
   * Forming
   * Formed
+    
 When the group isn't formed yet(no agents added to the group), the state is in the broken state.
 
 If an agent is selected it will automatically be added to the group, and the group's state will jump to forming.
