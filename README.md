@@ -83,12 +83,12 @@ Because the agent follows the commander's position, the formation stays together
 ![Formations](https://github.com/wountu/Research_Formations/assets/70692426/7bc11f64-4f3d-4349-80cb-93cdc063b3e5)
 
 
-Result: After all that we have a group that can travel in formation and easily change it's formation. 
+Result: After all that, we have a group that can travel in formation and easily change it's formation. 
 This can be used in a ton of RTS-Games to simulate an army marching/moving around.
 
 Future Work: In the future i would like to add collision-handling between the agents.
 Now the agents doesn't have collisions so they can still run into each other.
-This is obviously not that realistic and is sometghing I might want to change in the future.
+This is obviously not that realistic and is something I might want to change in the future.
 
 
 
