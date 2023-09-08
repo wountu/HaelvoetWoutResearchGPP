@@ -3,7 +3,7 @@
 For the course gameplay programming we had the chance to research someting on our own as long as it was related to gameplay programming.
 I chose for the topic Group formation and Group movement.
 
-For me to be able to create an application using group formation and movement, I had to firstly research on how to do it. 
+For me to be able to create an application using group formation and movement, I firstly had to  research on how to do it. 
 I followed a guideline on the following site:https://www.gamedeveloper.com/programming/implementing-coordinated-movement.
 
 Implementation:
